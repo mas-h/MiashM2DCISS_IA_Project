@@ -13,7 +13,7 @@ public class Coordonnee implements Comparable <Coordonnee> {
     //
     //*******************************************************************************//
     
-    public Coordonnee(int ligne, int colonne) {
+    public Coordonnee(int colonne, int ligne) {
         if(ligne < 0 || ligne > 25 || colonne < 0 || colonne > 25){
             throw new IllegalArgumentException("Veuillez fournir une coordonnée entre 0 et 25");
             }                                              //limitation du nb de lignes et de colonnes à 25 (nb de lettre dans l'alphabet)
@@ -29,11 +29,11 @@ public class Coordonnee implements Comparable <Coordonnee> {
 
         //Si le nombre ne correspond pas à la taille de la grille
         if(ligneEnCours < 0 || ligneEnCours > 25) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Ligne invalide");
             }  
         //Si le caractère n'est pas dans le tableau donc non valide
         if(colonneLettre <'A' || colonneLettre > 'Z') {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Colonne invalide");
             }
         
         this.ligne = ligneEnCours;
@@ -105,9 +105,18 @@ public class Coordonnee implements Comparable <Coordonnee> {
         
     }
     
-   public static void  main(String[]args) {
+   public static void  main(String[]args) { // test 
 	   
+	   Coordonnee test = new Coordonnee(0,5);
+	   Coordonnee test2 = new Coordonnee("A5");
 	   
+	   System.out.println("test :"+test.toString());
+	   System.out.println("colonne : "+test.getColonne()+" ligne : "+ test.getLigne());
+	   System.out.println("test2 :"+test2.toString());
+	   System.out.println("colonne : "+test2.getColonne()+" ligne : "+ test2.getLigne());
+	   System.out.println("test et test2 equals? "+ test.equals(test2));
+	   System.out.println("test compare to test2 : "+ test.compareTo(test2));
+	   System.out.println("test et test2 = voisine? "+ test.voisine(test2));
    }
 
 }
