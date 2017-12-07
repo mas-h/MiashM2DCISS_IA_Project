@@ -109,6 +109,7 @@ public class Coordonnee implements Comparable <Coordonnee> {
 	   
 	   Coordonnee test = new Coordonnee(0,0);
 	   Coordonnee test2 = new Coordonnee("A5");
+	   Coordonnee test3 = new Coordonnee("A0");
 	   
 	   System.out.println("test :"+test.toString());
 	   System.out.println("colonne : "+test.getColonne()+" ligne : "+ test.getLigne());
@@ -117,6 +118,8 @@ public class Coordonnee implements Comparable <Coordonnee> {
 	   System.out.println("test et test2 equals? "+ test.equals(test2));
 	   System.out.println("test compare to test2 : "+ test.compareTo(test2));
 	   System.out.println("test et test2 = voisine? "+ test.voisine(test2));
+	   
+	   System.out.println("equals" + test.equals(test3));
    }
 
 }
