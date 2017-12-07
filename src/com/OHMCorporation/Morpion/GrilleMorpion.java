@@ -52,20 +52,24 @@ public class GrilleMorpion {
 			cases = cases + "\n" + i;
 			for (int j = 0; j < this.taille; j++) {
 				boolean bool = false;
-				Coordonnee coord = new Coordonnee(i, j);
+				Coordonnee coord = new Coordonnee(j, i);
 				// on regarde si la case correspond à une case ayant pris un
 				// obus
-				for (int k = 0; k < nbCoupJoue; k++) {
-					if (caseOccupeesJ1[k].equals(coord)) {
-						// si une coordonnée a été utilisé par J1 on marque un X
+				for (int k = 0; k < caseOccupeesJ1.length; k++) {
+					if (caseOccupeesJ1[k]!= null){
+						if (caseOccupeesJ1[k].equals(coord)) {
+							// si une coordonnée a été utilisé par J1 on marque un X
 
-						cases = cases + "\tX";
-						bool = true;
+							cases = cases + "\tX";
+							bool = true;}
 						// si la case est utilisée par le J2 on marque 0
-					} else if (caseOccupeesJ2[k].equals(coord)) {
-						cases = cases + "\t0";
-						bool = true;
-					}
+					} 
+					else if (caseOccupeesJ2[k]!=null){
+							if (caseOccupeesJ2[k].equals(coord)) {
+								cases = cases + "\t0";
+								bool = true;
+							}
+					}	
 				}
 
 				// Si ni utilisé par J1 ou J2 dans la case alors mettre un point
@@ -87,17 +91,21 @@ public class GrilleMorpion {
 		
 	//On verifie si la coordonnées a déjà été utilisée par l'un des joueurs
 		private boolean estDejaUse(Coordonnee c) {
-			for (int i = 0; i < caseOccupeesJ1.length; i++)
-				if (caseOccupeesJ1[i].equals(c)||caseOccupeesJ2[i].equals(c))
-					return true;
+			for (int i = 0; i <= nbCoupJoue; i++)
+				if (caseOccupeesJ1[i]==null && caseOccupeesJ2[i]==null )
+					return false;
+				else{
+					if (caseOccupeesJ1[i].equals(c)||caseOccupeesJ2[i].equals(c))
+						return true;}
+			
 			return false;
 		}
 		
 		//on ajoute dans le tableau de coord, du joueur effectuant son moov, la coordonnée choisie si cela est possible 
 		private boolean ajouteDansCaseUse(int numJoueur,Coordonnee c) { // numJoueur = 1 pour j1 et 2 pour J2 //// solution à discuter car pas le mieux 
 			
-			if ( estDejaUse(c) || !(estDansGrille(c)) ) {
-				System.out.println("Case déjà utilisée ou en dehors des limites de la grille");
+			if ( !(estDansGrille(c)) || estDejaUse(c)  ) {
+				System.out.println("Case déjà utilisée ou est en dehors des limites de la grille");
 				return false;
 				}
 			
@@ -146,7 +154,10 @@ public class GrilleMorpion {
 		// problème de null pointer exception en testant ça, parce que mes tableaux sont vides quand je fais mes vérif du début
 		GrilleMorpion testGrille = new GrilleMorpion(4);
 		Coordonnee testJ1 = new Coordonnee("B2");
+		Coordonnee testJ2 = new Coordonnee("C2");
 		testGrille.ajouteDansCaseUse(1, testJ1);
+		//testGrille.ajouteDansCaseUse(2, testJ2);
+		System.out.println(testGrille.caseOccupeesJ1[0]);
 		System.out.println(testGrille.toString());
 	}
 	
