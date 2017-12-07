@@ -107,7 +107,7 @@ public class Coordonnee implements Comparable <Coordonnee> {
     
    public static void  main(String[]args) { // test 
 	   
-	   Coordonnee test = new Coordonnee(0,5);
+	   Coordonnee test = new Coordonnee(0,0);
 	   Coordonnee test2 = new Coordonnee("A5");
 	   
 	   System.out.println("test :"+test.toString());
