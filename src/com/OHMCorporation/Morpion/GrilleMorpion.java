@@ -47,31 +47,6 @@ public class GrilleMorpion {
 			casesGrille = casesGrille + "\t" +  c;
 		}
 
-<<<<<<< HEAD
-		for (int i = 0; i < this.taille; i++) {
-			// ecriture de la première ligne avec les nombres
-			cases = cases + "\n" + i;
-			for (int j = 0; j < this.taille; j++) {
-				boolean bool = false;
-				Coordonnee coord = new Coordonnee(j, i);
-				// on regarde si la case correspond à une case ayant pris un
-				// obus
-				for (int k = 0; k < caseOccupeesJ1.length; k++) {
-					if (caseOccupeesJ1[k]!= null){
-						if (caseOccupeesJ1[k].equals(coord)) {
-							// si une coordonnée a été utilisé par J1 on marque un X
-
-							cases = cases + "\tX";
-							bool = true;}
-						// si la case est utilisée par le J2 on marque 0
-					} 
-					else if (caseOccupeesJ2[k]!=null){
-							if (caseOccupeesJ2[k].equals(coord)) {
-								cases = cases + "\t0";
-								bool = true;
-							}
-					}	
-=======
 		// écriture des numéros de lignes + cases des grilles 
 		for (int iLignes = 0; iLignes < this.taille; iLignes++) {
 			// ecriture de la première ligne avec les nombres au coordonnées <col,ligne> : <0,1> 
@@ -104,7 +79,6 @@ public class GrilleMorpion {
 							caseDejaJouee = true;
 						}
 					}
->>>>>>> dbe4558064a47def397ab2758a7ee025bc77dc1b
 				}
 
 				// Si ni utilisé par J1 ou J2 dans la case alors mettre un point
@@ -126,15 +100,6 @@ public class GrilleMorpion {
 		}
 		
 	//On verifie si la coordonnées a déjà été utilisée par l'un des joueurs
-<<<<<<< HEAD
-		private boolean estDejaUse(Coordonnee c) {
-			for (int i = 0; i <= nbCoupJoue; i++)
-				if (caseOccupeesJ1[i]==null && caseOccupeesJ2[i]==null )
-					return false;
-				else{
-					if (caseOccupeesJ1[i].equals(c)||caseOccupeesJ2[i].equals(c))
-						return true;}
-=======
 		private boolean estDejaOcp(Coordonnee c) {
 			for (int i = 0; i <= nbCoupJoue; i++)
 				if (caseOccupeesJ1[i]==null || caseOccupeesJ2[i]==null )
@@ -143,7 +108,6 @@ public class GrilleMorpion {
 					if (caseOccupeesJ1[i].equals(c)||caseOccupeesJ2[i].equals(c))
 						return true;
 					}
->>>>>>> dbe4558064a47def397ab2758a7ee025bc77dc1b
 			
 			return false;
 		}
@@ -151,14 +115,9 @@ public class GrilleMorpion {
 		// compliqué avec 2 grilles à revoir si il reste du temps ( 1 seule grille avec valeurs J1=1 et J2=2 par exemple )
 		//on ajoute dans le tableau de coord, du joueur effectuant son moov, la coordonnée choisie si cela est possible 
 		private boolean ajouteDansCaseUse(int numJoueur,Coordonnee c) { // numJoueur = 1 pour j1 et 2 pour J2 //// solution à discuter car pas le mieux 
-<<<<<<< HEAD
-			
-			if ( !(estDansGrille(c)) || estDejaUse(c)  ) {
-=======
 			// TODO: En fait il est peut etre bien ici le bug...
 			if ( !estDansGrille(c) || estDejaOcp(c)  ) { // TODO: c'était le estDansGrille
 
->>>>>>> dbe4558064a47def397ab2758a7ee025bc77dc1b
 				System.out.println("Case déjà utilisée ou est en dehors des limites de la grille");
 				return false;
 			
@@ -213,13 +172,6 @@ public class GrilleMorpion {
 		// TODO Auto-generated method stub
 		// problème de null pointer exception en testant ça, parce que mes tableaux sont vides quand je fais mes vérif du début
 		GrilleMorpion testGrille = new GrilleMorpion(4);
-<<<<<<< HEAD
-		Coordonnee testJ1 = new Coordonnee("B2");
-		Coordonnee testJ2 = new Coordonnee("C2");
-		testGrille.ajouteDansCaseUse(1, testJ1);
-		//testGrille.ajouteDansCaseUse(2, testJ2);
-		System.out.println(testGrille.caseOccupeesJ1[0]);
-=======
 		
 		Coordonnee testJ1 = new Coordonnee("A0");
 		Coordonnee testJ2 = new Coordonnee("E3");
@@ -251,7 +203,6 @@ public class GrilleMorpion {
 //		System.out.println(testGrille.caseOccupeesJ2[2]);
 
 		
->>>>>>> dbe4558064a47def397ab2758a7ee025bc77dc1b
 		System.out.println(testGrille.toString());
 		
 		
