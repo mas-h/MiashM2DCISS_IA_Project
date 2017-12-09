@@ -88,7 +88,7 @@ public class GrilleMorpion {
 			}
 //			System.out.println("--------");
 		}
-		 // On revoie le tout ! MAIS TANT MIEUX ! MAIS TANT MIEUX !
+		 // On revoie le tout ! 
 		return (casesGrille);
 
 	}
@@ -158,12 +158,50 @@ public class GrilleMorpion {
 			}
 		}
 		
-		public boolean finDujeu(){ // TODO définir les règles de victoires 
+		public int getNbPionDansLigne(Coordonnee [] tabJoueur, int numLigne){ // permet de retourner le nombre de pion dans une ligne donnée d'un joueur
+			int nbPionDansLigne = 0;										  // Vérifiée, ça marche
+			for (int i = 0; i<nbCoupJoue;i++){
+				if (tabJoueur[i].getLigne()==numLigne){
+					nbPionDansLigne += 1;
+				}
+			}
+			return nbPionDansLigne;
+		}
+		
+		public int getNbPionDansColonne(Coordonnee [] tabJoueur, int numColone){ // permet de retourner le nombre de pion(s) dans une colone donnée d'un joueur
+			int nbPionDansColonne = 0;										  // Vérifiée, ça marche
+			for (int i = 0; i<nbCoupJoue;i++){
+				if (tabJoueur[i].getColonne()==numColone){
+					nbPionDansColonne += 1;
+				}
+			}
+			return nbPionDansColonne;
+		}
+		
+
+		
+		public boolean finDujeu(){ // TODO définir les règles de victoires pour les diagonales
+								   // Fonctionne pour les cas d'égalités, les cas de victoire horizontaux et verticaux
 			
-			if (nbCoupJoue==caseOccupeesJ1.length && tourJoue()) // cas d'égalité entre les joueurs
-				return true;
-			else 
-				return false;
+			for (int i = 0; i<this.taille;i++){ // on fait les test pour toutes les lignes et les colonnes (4 itérations ici au plus, taille de la grille)
+				if (this.getNbPionDansColonne(caseOccupeesJ1, i) == this.taille || this.getNbPionDansLigne(caseOccupeesJ1, i) == this.taille){ // si 4 cases avec la même lignes ou 4 cases avec la même colonne alors c'est gagné
+					System.out.println("Victoire du joueur 1");																				  // vérif pour le Joueur1
+					System.out.println("Partie terminée !");
+					return true;
+				}
+				if (this.getNbPionDansColonne(caseOccupeesJ2, i) == this.taille || this.getNbPionDansLigne(caseOccupeesJ2, i) == this.taille){ // même chose pour le Joueur 2
+					System.out.println("Victoire du joueur 2");
+					System.out.println("Partie terminée !");
+					return true;
+				}
+				
+			}
+			if (nbCoupJoue==caseOccupeesJ1.length && tourJoue()) { // cas d'égalité entre les joueurs
+				System.out.println("Egalité !");
+				System.out.println("Partie terminée !");
+				return true;}
+		 
+			return false;
 		}
 		
 	// TODO Continuer à implémenter les méthodes pour pouvoir tester ça
@@ -174,24 +212,29 @@ public class GrilleMorpion {
 		GrilleMorpion testGrille = new GrilleMorpion(4);
 		
 		Coordonnee testJ1 = new Coordonnee("A0");
-		Coordonnee testJ2 = new Coordonnee("E3");
-//		Coordonnee testJ12 = new Coordonnee("D2");
-//		Coordonnee testJ22 = new Coordonnee("B1");
-//		Coordonnee testJ13 = new Coordonnee("A3");
-//		Coordonnee testJ23 = new Coordonnee("C1");
-		
+		Coordonnee testJ2 = new Coordonnee("D3");
+		Coordonnee testJ12 = new Coordonnee("A1");
+		Coordonnee testJ22 = new Coordonnee("B1");
+		Coordonnee testJ13 = new Coordonnee("A2");
+		Coordonnee testJ23 = new Coordonnee("C1");
+		Coordonnee testJ14 = new Coordonnee("A3");
+		Coordonnee testJ24 = new Coordonnee("C2");
 		
 		testGrille.ajouteDansCaseUse(1, testJ1);
 		testGrille.ajouteDansCaseUse(2, testJ2);
-//		testGrille.tourSuivant();
-//		
-//		testGrille.ajouteDansCaseUse(1, testJ12);
-//		testGrille.ajouteDansCaseUse(2, testJ22);
-//		testGrille.tourSuivant();
-//		
-//		testGrille.ajouteDansCaseUse(1, testJ13);
-//		testGrille.ajouteDansCaseUse(2, testJ23);
-//		testGrille.tourSuivant();
+		testGrille.tourSuivant();
+		
+		testGrille.ajouteDansCaseUse(1, testJ12);
+		testGrille.ajouteDansCaseUse(2, testJ22);
+		testGrille.tourSuivant();
+		
+		testGrille.ajouteDansCaseUse(1, testJ13);
+		testGrille.ajouteDansCaseUse(2, testJ23);
+		testGrille.tourSuivant();
+		
+		testGrille.ajouteDansCaseUse(1, testJ14);
+		testGrille.ajouteDansCaseUse(2, testJ24);
+		testGrille.tourSuivant();
 
 		
 
@@ -205,7 +248,9 @@ public class GrilleMorpion {
 		
 		System.out.println(testGrille.toString());
 		
-		
+		System.out.println("Nombre de pion(s) dans la ligne 1 pour le joueur 2 : "+testGrille.getNbPionDansLigne(testGrille.caseOccupeesJ2, 1));
+		System.out.println("Nombre de pion(s) dans la colone 1 pour le joueur 1 : "+testGrille.getNbPionDansColonne(testGrille.caseOccupeesJ1, 0));
+		System.out.println("Partie terminée : "+ testGrille.finDujeu());
 	}
 	
 	
