@@ -48,13 +48,6 @@ public class JoueurTexte extends Joueur{
 
 
 	
-	public static void main(String[] args) { // test
-		GrilleHashmapMorpion grille = new GrilleHashmapMorpion(4);
-		JoueurTexte j1 = new JoueurTexte(grille, "Joueur 1", "1");
-		JoueurTexte j2 = new JoueurTexte(grille, "Joueur 2", "2");
-		
-		j1.jouerAvec(j2);
-		j1.debutAttaque();
-	}
+	
 
 }
