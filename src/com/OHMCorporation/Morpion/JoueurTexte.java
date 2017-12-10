@@ -2,18 +2,19 @@ package com.OHMCorporation.Morpion;
 
 import java.util.Scanner;
 
+
 public class JoueurTexte extends Joueur{
 
-	private Scanner scInput = new Scanner(System.in);
+//	private Scanner scInput = new Scanner(System.in);
 
 
 	public JoueurTexte(GrilleHashmapMorpion grilleJeu,String nom, String id) {
 		super(grilleJeu, nom, id);
 	}
 	
-	public void jouerAvecLeJoueur(Joueur j) {
-		super.joueAvec(j);
-	}
+//	public void jouerAvecLeJoueur(Joueur j) {
+//		super.jouerAvecLeJoueur(j);
+//	}
 
 	@Override
 	protected void perdu() {
@@ -45,10 +46,15 @@ public class JoueurTexte extends Joueur{
 		
 	}
 
-	@Override
-	public void debutAttaque() {
-		// TODO Auto-generated method stub
+
+	
+	public static void main(String[] args) { // test
+		GrilleHashmapMorpion grille = new GrilleHashmapMorpion(4);
+		JoueurTexte j1 = new JoueurTexte(grille, "Joueur 1", "1");
+		JoueurTexte j2 = new JoueurTexte(grille, "Joueur 2", "2");
 		
+		j1.jouerAvec(j2);
+		j1.debutAttaque();
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.OHMCorporation.Morpion;
 
+import java.util.Scanner;
+
 //import batailleNavale.Coordonnee;
 
 public abstract class Joueur {
@@ -8,6 +10,10 @@ public abstract class Joueur {
 	private String nomJoueur;
 	private String idJoueur;
 	private Joueur adversaire;
+	private int nbJoue =0;
+
+	private Scanner scInput = new Scanner(System.in);
+
 	
 	public Joueur(GrilleHashmapMorpion grilleJeu, String nom, String id) {
 		this.grilleDeJeu = grilleJeu;
@@ -27,16 +33,40 @@ public abstract class Joueur {
 		return this.idJoueur;
 	}
 	
-	public void joueAvec(Joueur j) {
+	public void jouerAvec(Joueur j) {
 		 this.adversaire = j;
 		 j.adversaire = this;
 	}
 	
 	public void attaque(Coordonnee c) {
-		
-		if(adversaire.defense(c)) {
+		grilleDeJeu.ajoutePionParJoueur(this, c);
+		nbJoue ++;
+		System.out.println(this.grilleDeJeu.toString());
+		System.out.println("Infos >> Le joueur " +this.getNom()+" a joué en: "+ c);
+		if(!this.grilleDeJeu.finDujeu(this)) {
 			adversaire.debutAttaque();
-			}
+		}
+		
+	}
+	
+	public void debutAttaque() {
+		
+		// vérifications des possibilités de jouer
+		if (!this.grilleDeJeu.finDujeu(this)) {
+
+			String inputCoordStr = "";
+			Coordonnee inputCoord = new Coordonnee(0, 0);
+			System.out.println("------------------------------------------");
+			System.out.println("C'est au tour de " + this.getNom() + " de jouer !");
+
+			System.out.println("En quelle coordonnée allez-vous jouer ?: \n");
+
+			inputCoordStr = this.scInput.nextLine();
+			inputCoord = new Coordonnee(inputCoordStr);
+
+			this.attaque(inputCoord);
+		}
+		
 	}
 	
 	/*
@@ -78,6 +108,10 @@ public abstract class Joueur {
 		return true;	
 	}
 	
+	public int getNbJoue() {
+		return nbJoue;
+	}
+	
 	
 	
 	
@@ -93,6 +127,6 @@ public abstract class Joueur {
 	// donne le droit de défendre à l'autre.
 	protected abstract void retourDefense(Coordonnee c, int etat);	
 	
-	public abstract void debutAttaque();
+//	public abstract void debutAttaque();
 
 }
