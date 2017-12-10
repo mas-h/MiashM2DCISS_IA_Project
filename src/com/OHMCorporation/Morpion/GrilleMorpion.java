@@ -178,18 +178,50 @@ public class GrilleMorpion {
 			return nbPionDansColonne;
 		}
 		
+		public int getnbPionDansDiagonaleA0(Coordonnee [] tabJoueur){ // méthode pour les verif de pion dans la diagonale qui débute en A0 et finie en D4
+			int nbPionDansDiagonale = 0;
+			Coordonnee A0 = new Coordonnee("A0");
+			Coordonnee B1 = new Coordonnee("B1");
+			Coordonnee C2 = new Coordonnee("C2");
+			Coordonnee D3 = new Coordonnee("D3");
+			
+			for (int i = 0; i<nbCoupJoue;i++){
+				if (tabJoueur[i].equals(A0)||tabJoueur[i].equals(B1)||tabJoueur[i].equals(C2)||tabJoueur[i].equals(D3)){
+					nbPionDansDiagonale += 1;
+				}
+			}
+			return nbPionDansDiagonale;
+		}
+		
+		public int getnbPionDansDiagonaleD0(Coordonnee [] tabJoueur){ // même chose pour la dagionale qui débute en D0 et finie en A3
+			int nbPionDansDiagonale = 0;
+			Coordonnee D0 = new Coordonnee("D0");
+			Coordonnee C1 = new Coordonnee("C1");
+			Coordonnee B2 = new Coordonnee("B2");
+			Coordonnee A3 = new Coordonnee("A3");
+			
+			for (int i = 0; i<nbCoupJoue;i++){
+				if (tabJoueur[i].equals(D0)||tabJoueur[i].equals(C1)||tabJoueur[i].equals(B2)||tabJoueur[i].equals(A3)){
+					nbPionDansDiagonale += 1;
+				}
+			}
+			return nbPionDansDiagonale;
+		}
+		
 
 		
 		public boolean finDujeu(){ // TODO définir les règles de victoires pour les diagonales
 								   // Fonctionne pour les cas d'égalités, les cas de victoire horizontaux et verticaux
 			
 			for (int i = 0; i<this.taille;i++){ // on fait les test pour toutes les lignes et les colonnes (4 itérations ici au plus, taille de la grille)
-				if (this.getNbPionDansColonne(caseOccupeesJ1, i) == this.taille || this.getNbPionDansLigne(caseOccupeesJ1, i) == this.taille){ // si 4 cases avec la même lignes ou 4 cases avec la même colonne alors c'est gagné
-					System.out.println("Victoire du joueur 1");																				  // vérif pour le Joueur1
+				if (this.getNbPionDansColonne(caseOccupeesJ1, i) == this.taille || this.getNbPionDansLigne(caseOccupeesJ1, i) == this.taille 		// si 4 cases avec la même lignes ou 4 cases avec la même colonne alors c'est gagné
+					|| this.getnbPionDansDiagonaleA0(caseOccupeesJ1) == this.taille || this.getnbPionDansDiagonaleD0(caseOccupeesJ1) == this.taille){ 
+					System.out.println("Victoire du joueur 1");																				  		// vérif pour le Joueur1
 					System.out.println("Partie terminée !");
 					return true;
 				}
-				if (this.getNbPionDansColonne(caseOccupeesJ2, i) == this.taille || this.getNbPionDansLigne(caseOccupeesJ2, i) == this.taille){ // même chose pour le Joueur 2
+				if (this.getNbPionDansColonne(caseOccupeesJ2, i) == this.taille || this.getNbPionDansLigne(caseOccupeesJ2, i) == this.taille 		// même chose pour le Joueur 2
+					|| this.getnbPionDansDiagonaleA0(caseOccupeesJ2) == this.taille || this.getnbPionDansDiagonaleD0(caseOccupeesJ2) == this.taille){
 					System.out.println("Victoire du joueur 2");
 					System.out.println("Partie terminée !");
 					return true;
@@ -250,6 +282,8 @@ public class GrilleMorpion {
 		
 		System.out.println("Nombre de pion(s) dans la ligne 1 pour le joueur 2 : "+testGrille.getNbPionDansLigne(testGrille.caseOccupeesJ2, 1));
 		System.out.println("Nombre de pion(s) dans la colone 1 pour le joueur 1 : "+testGrille.getNbPionDansColonne(testGrille.caseOccupeesJ1, 0));
+		System.out.println("Nombre de pion(s) dans la diago 1 pour le joueur 2 : "+testGrille.getnbPionDansDiagonaleA0(testGrille.caseOccupeesJ2));
+		System.out.println("Nombre de pion(s) dans la diago 2 pour le joueur 1 : "+testGrille.getnbPionDansDiagonaleA0(testGrille.caseOccupeesJ1));
 		System.out.println("Partie terminée : "+ testGrille.finDujeu());
 	}
 	
