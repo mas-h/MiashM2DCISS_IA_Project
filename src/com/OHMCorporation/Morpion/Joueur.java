@@ -6,10 +6,13 @@ import java.util.Scanner;
 
 public abstract class Joueur {
 	
-	private GrilleHashmapMorpion grilleDeJeu;
+	protected GrilleHashmapMorpion grilleDeJeu;
 	private String nomJoueur;
 	private String idJoueur;
 	private Joueur adversaire;
+	
+	
+
 	private int nbJoue =0;
 
 	private Scanner scInput = new Scanner(System.in);
@@ -21,10 +24,15 @@ public abstract class Joueur {
 		this.idJoueur = id;
 	}
 	
-	private GrilleHashmapMorpion getGrille() {
-		return this.grilleDeJeu;
+	public Joueur getAdversaire() {
+		return adversaire;
 	}
 	
+	
+	public void setAdversaire(Joueur adversaire) {
+		this.adversaire = adversaire;
+	}
+		
 	public String getNom() {
 		return this.nomJoueur;
 	}
@@ -53,18 +61,28 @@ public abstract class Joueur {
 		
 		// vérifications des possibilités de jouer
 		if (!this.grilleDeJeu.finDujeu(this)) {
-
 			String inputCoordStr = "";
 			Coordonnee inputCoord = new Coordonnee(0, 0);
+			
 			System.out.println("------------------------------------------");
 			System.out.println("C'est au tour de " + this.getNom() + " de jouer !");
 
 			System.out.println("En quelle coordonnée allez-vous jouer ?: \n");
+			
+			// si on jour contre une IA
+			if (this.getNom().equals("Joueur IA")) {
+				System.out.println(">> appel de l'algo de l'ia");
 
-			inputCoordStr = this.scInput.nextLine();
-			inputCoord = new Coordonnee(inputCoordStr);
-
-			this.attaque(inputCoord);
+				// calcul de la meilleure coordonnée à jouer
+				inputCoordStr = "A1"; // TODO: resultat d'exemple à changer par le retour de la methode
+				
+				inputCoord = new Coordonnee(inputCoordStr);
+				this.attaque(inputCoord);				
+			} else {			
+				inputCoordStr = this.scInput.nextLine();
+				inputCoord = new Coordonnee(inputCoordStr);
+				this.attaque(inputCoord);
+			}
 		}
 		
 	}
@@ -84,25 +102,7 @@ public abstract class Joueur {
 	public boolean defense(Coordonnee c) {
 		
 		int etat = 0;
-		
-//		if (this.grilleDeJeu.) {
-//			
-//		}
-//		this.grille.recoitTir(c);
-		
-//		// conditions de victoires vérifiées
-//		if(this.grilleDeJeu.perdu()){
-//			this.perdu();
-//			this.adversaire.gagne();
-//			return false;
-//		}
-		
-//		// Si elles ne sont pas vérifiées
-//		if(this.grilleDeJeu.estTouche(c))
-//			etat = this.grilleDeJeu.estCoule(c) ? COULE : TOUCHE;
-//		else
-//			etat = A_L_EAU;
-//		
+
 		retourDefense(c, etat);
 		adversaire.retourAttaque(c, etat);
 		return true;	

@@ -11,13 +11,21 @@ public class GrilleHashmapMorpion {
 	private int taille; // la taille de la grille
 
 	
+	public int getTaille() {
+		return taille;
+	}
+
+	public void setTaille(int taille) {
+		this.taille = taille;
+	}
+
 	private int nbToursJoues; // permettra de définir quand la partie est finie en cas d'égalité
 
 	// la grille est représentée dans un map. CaseGrille initialisé par une
 	// Coordonnée,null car auccun joueur n'a encore joué la case
 	// on pourra mettre différents types de joueurs, JoueurTexte, JoueurIA, etc ..
 	// private HashMap <CaseGrille, Joueur> grille = new HashMap<>();
-	private LinkedHashMap<Coordonnee, Joueur> grille = new LinkedHashMap<>();
+	private LinkedHashMap<CaseGrille, Joueur> grille = new LinkedHashMap<>();
 
 //	private int nbCoupsJ1 = 0;
 //	private int nbCoupsJ2 = 0;
@@ -39,12 +47,8 @@ public class GrilleHashmapMorpion {
 		for (int i = 0; i < taille; i++) {
 			for (int j = 0; j < taille; j++) {
 				Coordonnee c = new Coordonnee(j, i);
-				// Version avec la classe CaseGrille
-				// CaseGrille caseG = new CaseGrille(c, false);
-				// grille.put(caseG, null);
-				// System.out.println(c);
-				grille.put(c, null);
-
+				CaseGrille caseG = new CaseGrille(c, false, 1);
+				grille.put(caseG, null);
 			}
 		}
 		this.maxCoupJoue = grille.size()/2;
@@ -63,7 +67,7 @@ public class GrilleHashmapMorpion {
 		int nbCol = 0;
 		int nbLigne = 0;
 
-		for (Map.Entry<Coordonnee, Joueur> entry : this.grille.entrySet()) {
+		for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
 
 			// cas de la première ligne: 0
 			if (nbCol == 0 && nbLigne == 0) {
@@ -104,8 +108,8 @@ public class GrilleHashmapMorpion {
 	// On est certain que la coordonnée (la clé) existe, on vérifie donc juste si la
 	// valeur est != de null
 	private boolean estDejaOcp(Coordonnee c) {
-		for (Map.Entry<Coordonnee, Joueur> entry : this.grille.entrySet()) {
-			if (entry.getKey().equals(c) && entry.getValue() != null) {
+		for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
+			if (entry.getKey().getCoordonnee().equals(c) && entry.getValue() != null) {
 				// System.out.println(entry.getKey() + " = " + entry.getValue()+" est deja ocp")
 				return true;
 			}
@@ -113,24 +117,18 @@ public class GrilleHashmapMorpion {
 		return false;
 	}
 
-	// compliqué avec 2 grilles à revoir si il reste du temps ( 1 seule grille avec
-	// valeurs J1=1 et J2=2 par exemple )
-	// on ajoute dans le tableau de coord, du joueur effectuant son moov, la
-	// coordonnée choisie si cela est possible
+
+	// on ajoute dans le tableau de coord, du joueur effectuant son moov, la coordonnée choisie si cela est possible
 	public boolean ajoutePionParJoueur(Joueur joueur, Coordonnee c) { 
-		if (!estDansGrille(c) || estDejaOcp(c)) { // TODO: c'était le estDansGrille
+		if (!estDansGrille(c) || estDejaOcp(c)) { 
 			System.out.println("Case déjà utilisée ou est en dehors des limites de la grille");
 			return false;
 		} else {
-			for (Map.Entry<Coordonnee, Joueur> entry : this.grille.entrySet()) {
-				if (entry.getKey().equals(c)) {
-//					System.out.println("get: " + entry.getKey());
+			for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
+				if (entry.getKey().getCoordonnee().equals(c)) {
 					entry.setValue(joueur);
-//					if (joueur.getID().equals("1")) {
-//						nbCoupsJ1 ++;
-//					} else if (joueur.getID().equals("2")) { 
-//						nbCoupsJ2 ++;
-//					}
+					entry.getKey().setOccupied(true);
+					entry.getKey().setPoidsCase(0);
 					return true;
 				}
 			}
@@ -138,33 +136,6 @@ public class GrilleHashmapMorpion {
 		}
 	}
 
-//	/**
-//	 * Verifie que le nombre de coups joués par les 2 joueurs soit égaux
-//	 * @return
-//	 */
-//	public boolean tourJoue() { 
-//		for (Map.Entry<Coordonnee, Joueur> entry : this.grille.entrySet()) {
-//			if(entry.getValue() == null ) {
-//			}
-//			else { 	
-//				if (entry.getValue().getID().equals("1")) {
-//					nbCoupsJ1 += 1;
-//				}
-//				if (entry.getValue().getID().equals("2")) {
-//					nbCoupsJ2 += 1;}	
-//			}			
-//		}
-//		return (nbCoupsJ1 == nbCoupsJ2);
-//	}
-//
-//	public boolean tourSuivant() {
-//		if (!tourJoue()) {
-//			return false;
-//		} else {
-//			nbToursJoues += 1;
-//			return true;
-//		}
-//	}
 	/**
 	 *  permet de retourner le nombre de pion dans une ligne donnée d'un joueur
 	 * @param numLigne
@@ -173,8 +144,8 @@ public class GrilleHashmapMorpion {
 	 */
 	public int getNbPionDansLigne(int numLigne, Joueur j){// Vérifiée, ça marche 
 		int nbPionDansLigne = 0;		
-		for (Map.Entry<Coordonnee, Joueur> entry : this.grille.entrySet()) {
-			if(j.equals(entry.getValue()) && entry.getKey().getLigne() == numLigne) {
+		for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
+			if(j.equals(entry.getValue()) && entry.getKey().getCoordonnee().getLigne() == numLigne) {
 				nbPionDansLigne++;
 			}		
 		}
@@ -183,8 +154,8 @@ public class GrilleHashmapMorpion {
 	
 	public int getNbPionDansColonne(int numColone, Joueur j){ // permet de retourner le nombre de pion(s) dans une colone donnée d'un joueur
 		int nbPionDansColonne = 0;		
-		for (Map.Entry<Coordonnee, Joueur> entry : this.grille.entrySet()) {
-			if(j.equals(entry.getValue()) && entry.getKey().getColonne() == numColone) {
+		for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
+			if(j.equals(entry.getValue()) && entry.getKey().getCoordonnee().getColonne() == numColone) {
 				nbPionDansColonne++;
 			}		
 		}
@@ -198,9 +169,9 @@ public class GrilleHashmapMorpion {
 		Coordonnee C2 = new Coordonnee("C2");
 		Coordonnee D3 = new Coordonnee("D3");
 		
-		for (Map.Entry<Coordonnee, Joueur> entry : this.grille.entrySet()) {
-			if(j.equals(entry.getValue()) && ( entry.getKey().equals(A0) || entry.getKey().equals(B1) 
-					|| entry.getKey().equals(C2) || entry.getKey().equals(D3)) ) {
+		for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
+			if(j.equals(entry.getValue()) && ( entry.getKey().getCoordonnee().equals(A0) || entry.getKey().getCoordonnee().equals(B1) 
+					|| entry.getKey().getCoordonnee().equals(C2) || entry.getKey().getCoordonnee().equals(D3)) ) {
 				nbPionDansDiagonale++;
 			}		
 		}
@@ -214,9 +185,9 @@ public class GrilleHashmapMorpion {
 		Coordonnee B2 = new Coordonnee("B2");
 		Coordonnee A3 = new Coordonnee("A3");
 		
-		for (Map.Entry<Coordonnee, Joueur> entry : this.grille.entrySet()) {
-			if(j.equals(entry.getValue()) && ( entry.getKey().equals(D0) || entry.getKey().equals(C1) 
-					|| entry.getKey().equals(B2) || entry.getKey().equals(A3)) ) {
+		for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
+			if(j.equals(entry.getValue()) && ( entry.getKey().getCoordonnee().equals(D0) || entry.getKey().getCoordonnee().equals(C1) 
+					|| entry.getKey().getCoordonnee().equals(B2) || entry.getKey().getCoordonnee().equals(A3)) ) {
 				nbPionDansDiagonale++;
 			}		
 		}
@@ -258,19 +229,6 @@ public class GrilleHashmapMorpion {
 		Coordonnee test3 = new Coordonnee("A2");
 		Coordonnee test4 = new Coordonnee("A3");
 		Coordonnee testJ2 = new Coordonnee("B1");
-
-
-		// System.out.println("coordonnee deja occupée ??: "+
-		// testGrille.estDejaOcp(testJ1));
-		// testGrille.ajouteDansCaseUse(joueur1, testJ1);
-		// System.out.println("coordonnee deja occupée ??: "+
-		// testGrille.estDejaOcp(testJ1));
-		// System.out.println("coordonnee deja occupée ??: "+
-		// testGrille.estDejaOcp(testJ2));
-		// testGrille.ajouteDansCaseUse(joueur2, testJ2);
-		// System.out.println("coordonnee deja occupée ??: "+
-		// testGrille.estDejaOcp(testJ2));
-		// testGrille.tourSuivant();
 
 		testGrille.ajoutePionParJoueur(joueur1, test1);
 		testGrille.ajoutePionParJoueur(joueur1, test2);
