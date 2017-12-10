@@ -9,9 +9,10 @@ public abstract class Joueur {
 	private String idJoueur;
 	private Joueur adversaire;
 	
-	public Joueur(GrilleHashmapMorpion grilleJeu, String nom) {
+	public Joueur(GrilleHashmapMorpion grilleJeu, String nom, String id) {
 		this.grilleDeJeu = grilleJeu;
 		this.nomJoueur = nom;
+		this.idJoueur = id;
 	}
 	
 	private GrilleHashmapMorpion getGrille() {

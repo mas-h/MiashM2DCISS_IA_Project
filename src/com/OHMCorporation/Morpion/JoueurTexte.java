@@ -7,8 +7,8 @@ public class JoueurTexte extends Joueur{
 	private Scanner scInput = new Scanner(System.in);
 
 
-	public JoueurTexte(GrilleHashmapMorpion grilleJeu, String nom) {
-		super(grilleJeu, nom);
+	public JoueurTexte(GrilleHashmapMorpion grilleJeu,String nom, String id) {
+		super(grilleJeu, nom, id);
 	}
 	
 	public void jouerAvecLeJoueur(Joueur j) {
