@@ -65,6 +65,13 @@ public class JoueurTexte extends Joueur{
 	}
 
 
+	@Override
+	public Coordonnee returnBestCoord(GrilleHashmapMorpion grille, int profondeur) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 	
 	
 

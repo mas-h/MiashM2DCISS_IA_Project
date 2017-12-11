@@ -2,6 +2,7 @@ package com.OHMCorporation.Morpion;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class JoueurAuto extends Joueur{
 
@@ -44,6 +45,22 @@ public class JoueurAuto extends Joueur{
 	 * @return int res
 	 */
 	public int evaluationGrille(GrilleHashmapMorpion grille) {
+		
+		// si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
+		
+		if (grille.finDujeu(this)){ 
+			return 1000;
+		}
+		
+		if (grille.finDujeu(this.getAdversaire())) {
+			return -1000;
+		}
+		// égalité
+//		if (grille.get) {
+//			
+//		}
+		
+
 	
 		int res = 0;
 		Joueur adv = this.getAdversaire();
@@ -101,9 +118,9 @@ public class JoueurAuto extends Joueur{
 		if (nbPionsDiagonaleD0 == 3) { scoreDiagD0 = (nbPionsDiagonaleSelfD0 - nbPionsDiagonaleAdvD0) * 40; }
 		mapPoids.put(new CaseGrille("Score Diagonale D0 ", scoreDiagD0), null);	// ajout dans le map
 		
-		System.out.println(">> contenu du map");
+		System.out.println(">> évalué ..\n");
 		for (Map.Entry<CaseGrille, Joueur> entry : mapPoids.entrySet()) {
-			System.out.println("> test mapPoids: "+entry.getKey().toString());	
+//			System.out.println("> test mapPoids: "+entry.getKey().toString());	
 			res += entry.getKey().getPoidsLigne();
 		}
 		
@@ -118,53 +135,97 @@ public class JoueurAuto extends Joueur{
 		
 	}
 	
-public double Min (GrilleHashmapMorpion grilleJeu,int profondeur){
-		
-		double min = Double.MAX_VALUE;
-		double tmp;
-		
-		if (profondeur == 0 || grilleJeu.finDujeu(this)|| grilleJeu.finDujeu(this.getAdversaire())){ // si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
-			return evaluationGrille(grilleJeu);} // On retourne l'évaluation
-		
-		for (Map.Entry<CaseGrille, Joueur> entry : grilleJeu.getGrille().entrySet()) { // sinon on parcours le jeu et à chaque case vide on simule 
-            if (entry.getKey().getIsOccupied()==false) {
-            	grilleJeu.ajoutePionParJoueur(getAdversaire(), entry.getKey().getCoordonnee()); //jeu->joue(i,j);
-            	
-            	tmp = Max(grilleJeu, profondeur-1); // on calcule la valeur max et on compare si c'est plus petit que la valeur min
-            	if(tmp<min){
-            		min = tmp;
-            	}
-            	//On annule le coup car ce n'était qu'une simulation
-            	entry.setValue(null);
-            	entry.getKey().setOccupied(false);
-            }
-       }
-       return min; // on retourne la valeur minimal
-    }
+	public double Min (GrilleHashmapMorpion grilleJeu,int profondeur){
+			
+			double min = Double.MAX_VALUE;
+			double tmp;
+			
+			if (profondeur == 0 || grilleJeu.finDujeu(this)|| grilleJeu.finDujeu(this.getAdversaire())){ // si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
+				System.out.println(">>> retour eval .. ");
+				return evaluationGrille(grilleJeu);
+			} // On retourne l'évaluation
+			// get grille pas net
+			for (Map.Entry<CaseGrille, Joueur> entry : grilleJeu.getGrille().entrySet()) { // sinon on parcours le jeu et à chaque case vide on simule 
+	            if (entry.getKey().getIsOccupied()==false) {
+	            	grilleJeu.ajoutePionParJoueur(getAdversaire(), entry.getKey().getCoordonnee()); //jeu->joue(i,j);
+	            	
+	            	tmp = Max(grilleJeu, profondeur-1); // on calcule la valeur max et on compare si c'est plus petit que la valeur min
+	            	if(tmp<min){
+	            		min = tmp;
+	            	}
+	            	//On annule le coup car ce n'était qu'une simulation
+	            	entry.setValue(null);
+	            	entry.getKey().setOccupied(false);
+	            }
+	       }
+	       return min; // on retourne la valeur minimal
+	    }
 	
-public double Max(GrilleHashmapMorpion grilleJeu, int profondeur){
-		
+	public double Max(GrilleHashmapMorpion grilleJeu, int profondeur){
+			
+			double max = Double.MIN_VALUE;
+			double tmpMax;
+			
+			if (profondeur == 0 || grilleJeu.finDujeu(this)|| grilleJeu.finDujeu(this.getAdversaire())){ // si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
+				System.out.println(">>>Max est appelé !");
+				return evaluationGrille(grilleJeu);} // On retourne l'évaluation
+			
+			for (Map.Entry<CaseGrille, Joueur> entry : grilleJeu.getGrille().entrySet()) { // sinon on parcours le jeu et à chaque case vide on simule 
+	            if (entry.getKey().getIsOccupied()==false) {
+	            	grilleJeu.ajoutePionParJoueur(this, entry.getKey().getCoordonnee()); //jeu->joue(i,j);
+	            	
+	            	tmpMax = Min(grilleJeu, profondeur-1); // on calcule la valeur min et on compare si c'est plus grand que la valeur max
+	            	if(tmpMax > max){
+	            		max = tmpMax;
+	            	}
+	            	//On annule le coup car ce n'était qu'une simulation
+	            	entry.setValue(null);
+	            	entry.getKey().setOccupied(false);
+	            }
+	       }
+	       return max; // on retourne la valeur maximale
+	   }
+	
+	public Coordonnee returnBestCoord(GrilleHashmapMorpion grilleJeu, int profondeur){
 		double max = Double.MIN_VALUE;
 		double tmp;
+		Coordonnee best= new Coordonnee("E6");
 		
-		if (profondeur == 0 || grilleJeu.finDujeu(this)|| grilleJeu.finDujeu(this.getAdversaire())){ // si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
-			return evaluationGrille(grilleJeu);} // On retourne l'évaluation
+		if (profondeur != 0 || !(grilleJeu.finDujeu(this))|| !(grilleJeu.finDujeu(this.getAdversaire() ) )){ // si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
+			System.out.println("on passe bien dans le if de bestcoord()");
 		
-		for (Map.Entry<CaseGrille, Joueur> entry : grilleJeu.getGrille().entrySet()) { // sinon on parcours le jeu et à chaque case vide on simule 
-            if (entry.getKey().getIsOccupied()==false) {
-            	grilleJeu.ajoutePionParJoueur(this, entry.getKey().getCoordonnee()); //jeu->joue(i,j);
-            	
-            	tmp = Min(grilleJeu, profondeur-1); // on calcule la valeur min et on compare si c'est plus grand que la valeur max
-            	if(tmp > max){
-            		max = tmp;
-            	}
-            	//On annule le coup car ce n'était qu'une simulation
-            	entry.setValue(null);
-            	entry.getKey().setOccupied(false);
-            }
-       }
-       return max; // on retourne la valeur maximale
-   }
+			for (Map.Entry<CaseGrille, Joueur> entry : grilleJeu.getGrille().entrySet()) { // sinon on parcours le jeu et à chaque case vide on simule 
+	            if (entry.getKey().getIsOccupied()==false) {
+	            	System.out.println("on verifie une case libre");
+	            	grilleJeu.ajoutePionParJoueur(this, entry.getKey().getCoordonnee()); //jeu->joue(i,j);
+	            	
+	            	tmp = Min(grilleJeu, profondeur-1); // on calcule la valeur min et on compare si c'est plus grand que la valeur max
+	            	System.out.println("tmp: " +tmp);
+	            	if(tmp>max){
+	            		System.out.println(">> dans tmp>max");
+	            		max = tmp;
+	            		best = entry.getKey().getCoordonnee(); // on sauvegarde la coordonée, le meilleur coup pour le moment.
+	            	}
+	            	
+	            	//TODO: pauffiner les cas dd'égalités ou de meme scores
+//	            	if (tmp==max){
+//	            		System.out.println(">> dans tmp==max");
+//	            		boolean random = Math.random() < 0.5; // si on obtient la même valeur que max, on choisi aléatoirement entre max et tmp
+//	            		if (random){
+//	            			max = tmp;
+//	            			best = entry.getKey().getCoordonnee(); 
+//	            		}	
+//	            	}
+	            	//On annule le coup car ce n'était qu'une simulation
+	            	entry.setValue(null);
+	            	entry.getKey().setOccupied(false);
+	            }
+	       }
+			 
+		}
+		System.out.println("le meilleur coup à jouer est : "+best.toString());
+		return best; // on retourne la Coordonnee à jouer
+	}
 	
 	@Override
 	protected void perdu() {
