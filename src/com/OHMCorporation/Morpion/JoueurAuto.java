@@ -40,20 +40,21 @@ public class JoueurAuto extends Joueur{
 	 * evalue pour chaque ligne, colone et diagonale: analyse une ligne et détermine un score. 
 	 * si c'est 1 pions sur une ligne, on fait *10, 2pions *30 et 3 pions *40
 	 * retourne le choix de jeu le plus intéréssant à jouer.
+	 * @param GrilleHasmapMorpion à évaluer
 	 * @return int res
 	 */
-	public int evaluation() {
+	public int evaluationGrille(GrilleHashmapMorpion grille) {
 	
 		int res = 0;
 		Joueur adv = this.getAdversaire();
 		LinkedHashMap<CaseGrille, Joueur> mapPoids = new LinkedHashMap<>();	// |	Joueur	|	Poids d'une ligne
 
 		// ////////// Pour les lignes et colones //////////
-		for (int jLigne = 0; jLigne < grilleDeJeu.getTaille(); jLigne++) {
+		for (int jLigne = 0; jLigne < grille.getTaille(); jLigne++) {
 			
 			// nbPion sur une ligne
-			int nbPionsLigneSelf = grilleDeJeu.getNbPionDansLigne(jLigne,this); // nbPions IA
-			int nbPionsLigneAdv = grilleDeJeu.getNbPionDansLigne(jLigne,adv); // nbPions ADVERSAIRE
+			int nbPionsLigneSelf = grille.getNbPionDansLigne(jLigne,this); // nbPions IA
+			int nbPionsLigneAdv = grille.getNbPionDansLigne(jLigne,adv); // nbPions ADVERSAIRE
 			int nbPionsLigne = nbPionsLigneSelf + nbPionsLigneAdv;
 			int scoreLigne = 0;
 			
@@ -64,8 +65,8 @@ public class JoueurAuto extends Joueur{
 			mapPoids.put(new CaseGrille("Score Ligne n°"+jLigne, scoreLigne), null);	// ajout dans le map
 		
 			// nbPion sur une colone
-			int nbPionsColSelf = grilleDeJeu.getNbPionDansColonne(jLigne,this);	
-			int nbPionsColAdv = grilleDeJeu.getNbPionDansColonne(jLigne,adv);	
+			int nbPionsColSelf = grille.getNbPionDansColonne(jLigne,this);	
+			int nbPionsColAdv = grille.getNbPionDansColonne(jLigne,adv);	
 			int nbPionsColone = nbPionsColSelf + nbPionsColAdv;
 			int scoreColone = 0;
 			
@@ -78,8 +79,8 @@ public class JoueurAuto extends Joueur{
 		
 		// Diagonale A0
 		int scoreDiagA0 = 0;
-		int nbPionsDiagonaleSelfA0 = grilleDeJeu.getnbPionDansDiagonaleA0(this);	
-		int nbPionsDiagonaleAdvA0 = grilleDeJeu.getnbPionDansDiagonaleA0(adv);
+		int nbPionsDiagonaleSelfA0 = grille.getnbPionDansDiagonaleA0(this);	
+		int nbPionsDiagonaleAdvA0 = grille.getnbPionDansDiagonaleA0(adv);
 		int nbPionsDiagonaleA0 = nbPionsDiagonaleSelfA0 + nbPionsDiagonaleAdvA0;
 
 		if (nbPionsDiagonaleA0 == 0) { scoreDiagA0 = (nbPionsDiagonaleSelfA0 - nbPionsDiagonaleAdvA0) * 10; }
@@ -90,8 +91,8 @@ public class JoueurAuto extends Joueur{
 		
 		// Diagonale D0
 		int scoreDiagD0 = 0;
-		int nbPionsDiagonaleSelfD0 = grilleDeJeu.getnbPionDansDiagonaleD0(this);	
-		int nbPionsDiagonaleAdvD0 = grilleDeJeu.getnbPionDansDiagonaleD0(adv);
+		int nbPionsDiagonaleSelfD0 = grille.getnbPionDansDiagonaleD0(this);	
+		int nbPionsDiagonaleAdvD0 = grille.getnbPionDansDiagonaleD0(adv);
 		int nbPionsDiagonaleD0 = nbPionsDiagonaleSelfD0 + nbPionsDiagonaleAdvD0;
 		
 		if (nbPionsDiagonaleD0 == 0) { scoreDiagD0 = (nbPionsDiagonaleSelfD0 - nbPionsDiagonaleAdvD0) * 10; }
@@ -144,4 +145,5 @@ public class JoueurAuto extends Joueur{
 	public static void main(String[] args) { // test
 		
 	}
+
 }

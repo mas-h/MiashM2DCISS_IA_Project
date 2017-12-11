@@ -72,16 +72,15 @@ public abstract class Joueur {
 			// si on jour contre une IA
 			if (this.getNom().equals("Joueur IA")) {
 				System.out.println(">> appel de l'algo de l'ia");
-				
+			
 				// calcul de la meilleure coordonnée à jouer
 //				System.out.println("typeof: "+ this.getClass());
-				evaluation();
+				evaluationGrille(grilleDeJeu);
 				inputCoordStr = "A1"; // TODO: resultat d'exemple à changer par le retour de la methode
 
-
-				
 				inputCoord = new Coordonnee(inputCoordStr);
-				this.attaque(inputCoord);				
+				this.attaque(inputCoord);
+			// sinon c'est un joueur	
 			} else {			
 				inputCoordStr = this.scInput.nextLine();
 				inputCoord = new Coordonnee(inputCoordStr);
@@ -120,7 +119,7 @@ public abstract class Joueur {
 	// donne le droit de défendre à l'autre.
 	protected abstract void retourDefense(Coordonnee c, int etat);	
 	
-	public abstract int evaluation();
+	public abstract int evaluationGrille(GrilleHashmapMorpion grille);
 	
 //	public abstract void debutAttaque();
 

@@ -45,7 +45,7 @@ public class JoueurTexte extends Joueur{
 
 
 	@Override
-	public int evaluation() {
+	public int evaluationGrille() {
 		// do nothing
 		return 0;
 	}
