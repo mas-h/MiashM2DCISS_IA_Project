@@ -118,6 +118,54 @@ public class JoueurAuto extends Joueur{
 		
 	}
 	
+public double Min (GrilleHashmapMorpion grilleJeu,int profondeur){
+		
+		double min = Double.MAX_VALUE;
+		double tmp;
+		
+		if (profondeur == 0 || grilleJeu.finDujeu(this)|| grilleJeu.finDujeu(this.getAdversaire())){ // si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
+			return evaluationGrille(grilleJeu);} // On retourne l'évaluation
+		
+		for (Map.Entry<CaseGrille, Joueur> entry : grilleJeu.getGrille().entrySet()) { // sinon on parcours le jeu et à chaque case vide on simule 
+            if (entry.getKey().getIsOccupied()==false) {
+            	grilleJeu.ajoutePionParJoueur(getAdversaire(), entry.getKey().getCoordonnee()); //jeu->joue(i,j);
+            	
+            	tmp = Max(grilleJeu, profondeur-1); // on calcule la valeur max et on compare si c'est plus petit que la valeur min
+            	if(tmp<min){
+            		min = tmp;
+            	}
+            	//On annule le coup car ce n'était qu'une simulation
+            	entry.setValue(null);
+            	entry.getKey().setOccupied(false);
+            }
+       }
+       return min; // on retourne la valeur minimal
+    }
+	
+public double Max(GrilleHashmapMorpion grilleJeu, int profondeur){
+		
+		double max = Double.MIN_VALUE;
+		double tmp;
+		
+		if (profondeur == 0 || grilleJeu.finDujeu(this)|| grilleJeu.finDujeu(this.getAdversaire())){ // si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
+			return evaluationGrille(grilleJeu);} // On retourne l'évaluation
+		
+		for (Map.Entry<CaseGrille, Joueur> entry : grilleJeu.getGrille().entrySet()) { // sinon on parcours le jeu et à chaque case vide on simule 
+            if (entry.getKey().getIsOccupied()==false) {
+            	grilleJeu.ajoutePionParJoueur(this, entry.getKey().getCoordonnee()); //jeu->joue(i,j);
+            	
+            	tmp = Min(grilleJeu, profondeur-1); // on calcule la valeur min et on compare si c'est plus grand que la valeur max
+            	if(tmp > max){
+            		max = tmp;
+            	}
+            	//On annule le coup car ce n'était qu'une simulation
+            	entry.setValue(null);
+            	entry.getKey().setOccupied(false);
+            }
+       }
+       return max; // on retourne la valeur maximale
+   }
+	
 	@Override
 	protected void perdu() {
 		// TODO Auto-generated method stub

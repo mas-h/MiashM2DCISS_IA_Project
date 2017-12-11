@@ -45,8 +45,22 @@ public class JoueurTexte extends Joueur{
 
 
 	@Override
-	public int evaluationGrille() {
+	public int evaluationGrille(GrilleHashmapMorpion grilleJeu) {
 		// do nothing
+		return 0;
+	}
+
+
+	@Override
+	public double Max(GrilleHashmapMorpion grille, int profondeur) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public double Min(GrilleHashmapMorpion grille, int profondeur) {
+		// TODO Auto-generated method stub
 		return 0;
 	}
 
