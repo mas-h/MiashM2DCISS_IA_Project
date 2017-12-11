@@ -12,9 +12,6 @@ public class JoueurTexte extends Joueur{
 		super(grilleJeu, nom, id);
 	}
 	
-//	public void jouerAvecLeJoueur(Joueur j) {
-//		super.jouerAvecLeJoueur(j);
-//	}
 
 	@Override
 	protected void perdu() {
@@ -44,6 +41,13 @@ public class JoueurTexte extends Joueur{
 	protected void retourDefense(Coordonnee c, int etat) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	@Override
+	public int evaluationGrille() {
+		// do nothing
+		return 0;
 	}
 
 
