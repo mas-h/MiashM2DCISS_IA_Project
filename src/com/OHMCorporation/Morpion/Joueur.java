@@ -72,9 +72,13 @@ public abstract class Joueur {
 			// si on jour contre une IA
 			if (this.getNom().equals("Joueur IA")) {
 				System.out.println(">> appel de l'algo de l'ia");
-
+				
 				// calcul de la meilleure coordonnée à jouer
+//				System.out.println("typeof: "+ this.getClass());
+				evaluation();
 				inputCoordStr = "A1"; // TODO: resultat d'exemple à changer par le retour de la methode
+
+
 				
 				inputCoord = new Coordonnee(inputCoordStr);
 				this.attaque(inputCoord);				
@@ -87,18 +91,7 @@ public abstract class Joueur {
 		
 	}
 	
-	/*
-	 * Retourne false si et seulement si la partie est terminée (le tir en c coule le dernier navire dans la grille de
-	 * this). Cette méthode est invoquée par le joueur adverse lors d'une attaque de sa part. Un tir en c sur la grille de
-	 * this est pris en compte et les conditions de victoire/défaite sont vérifiées. 
-	 */
-	/**
-	 * Retourne false SEULEMENT si un joueur à gagné la partie ou si tous les coups on été joués et qu'il y a égalité.
-	 * Cette méthode est invoquée par le joueur adverse lors d'une attaque de sa part.
-	 * 
-	 * @param c
-	 * @return
-	 */
+	
 	public boolean defense(Coordonnee c) {
 		
 		int etat = 0;
@@ -126,6 +119,8 @@ public abstract class Joueur {
 	
 	// donne le droit de défendre à l'autre.
 	protected abstract void retourDefense(Coordonnee c, int etat);	
+	
+	public abstract int evaluation();
 	
 //	public abstract void debutAttaque();
 

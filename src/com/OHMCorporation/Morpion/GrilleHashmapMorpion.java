@@ -1,7 +1,5 @@
 package com.OHMCorporation.Morpion;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -11,13 +9,6 @@ public class GrilleHashmapMorpion {
 	private int taille; // la taille de la grille
 
 	
-	public int getTaille() {
-		return taille;
-	}
-
-	public void setTaille(int taille) {
-		this.taille = taille;
-	}
 
 	private int nbToursJoues; // permettra de définir quand la partie est finie en cas d'égalité
 
@@ -54,7 +45,15 @@ public class GrilleHashmapMorpion {
 		this.maxCoupJoue = grille.size()/2;
 	}
 
-	//
+	
+	public int getTaille() {
+		return taille;
+	}
+	
+	public void setTaille(int taille) {
+		this.taille = taille;
+	}
+	
 	public String toString() { // permet d'afficher la grille dans la console
 
 		// Ecriture des colones avec le un référencement alphabétique
@@ -86,11 +85,9 @@ public class GrilleHashmapMorpion {
 				nbCol += 1;
 			} else {
 				if (entry.getValue().getID().equals("1")) {
-					// System.out.println("j1");
 					casesGrille = casesGrille + "\tX";
 					nbCol += 1;
 				} else {
-					// System.out.println("j2");
 					casesGrille = casesGrille + "\tO";
 					nbCol += 1;
 				}
@@ -147,6 +144,7 @@ public class GrilleHashmapMorpion {
 		for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
 			if(j.equals(entry.getValue()) && entry.getKey().getCoordonnee().getLigne() == numLigne) {
 				nbPionDansLigne++;
+				System.out.println("joueur: "+ j.getNom() + " nbPionDansLigne "+ nbPionDansLigne);
 			}		
 		}
 		return nbPionDansLigne;
