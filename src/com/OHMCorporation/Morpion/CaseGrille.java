@@ -5,16 +5,14 @@ public class CaseGrille {
 	private Coordonnee coord;
 	private boolean caseOccupee = false;
 	private int poidsCase = 1;
-	private String ligneCol = "";
+	private int poidsLigne = 0;
+	private String numLigne = "";
 	
 	
 	@Override
 	public String toString() {
-		return "CaseGrille [coord=" + coord + ", caseOccupee=" + caseOccupee + ", poidsCase=" + poidsCase + "]" +
-				" ligneCol: " + ligneCol;
+		return "CaseGrille [poidsLigne=" + poidsLigne + ", numLigne=" + numLigne + "]";
 	}
-
-
 
 	public CaseGrille(Coordonnee c, boolean statusCase, int poids) {
 		this.coord = c;
@@ -22,14 +20,28 @@ public class CaseGrille {
 		this.poidsCase = poids;
 	}
 	
-	public CaseGrille(String ligneColone, int poids) {
-		this.ligneCol = ligneColone;
-		this.poidsCase = poids;
+	public CaseGrille(String ligneColone, int poidsline) {
+		this.numLigne = ligneColone;
+		this.poidsLigne = poidsline;
 	}
+	
+	
 	
 	public int getPoidsCase() {
 		return poidsCase;
 	}
+
+
+	public int getPoidsLigne() {
+		return poidsLigne;
+	}
+
+
+
+	public void setPoidsLigne(int poidsLigne) {
+		this.poidsLigne = poidsLigne;
+	}
+
 
 
 	public void setPoidsCase(int poidsCase) {

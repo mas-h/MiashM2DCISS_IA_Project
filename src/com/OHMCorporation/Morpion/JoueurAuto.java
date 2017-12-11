@@ -36,14 +36,14 @@ public class JoueurAuto extends Joueur{
 	}
 	
 	/**
-	 * evalue pour chaque ligne, colone et diagonale: elle scan une ligne et elle détermine un score. adversaire = -1, allié = +1 
+	 * 	// score = coeff * ( nbPionIA - nbPionAdv )
+	 * evalue pour chaque ligne, colone et diagonale: analyse une ligne et détermine un score. 
 	 * si c'est 1 pions sur une ligne, on fait *10, 2pions *30 et 3 pions *40
-	 * retourne le choix de jeu le plus intéréssant à jouer (comparaison entre valeur la plus négative et valeur positive la plus grande
-	 * @return
+	 * retourne le choix de jeu le plus intéréssant à jouer.
+	 * @return int res
 	 */
 	public int evaluation() {
-		double minDangereux = 0;
-		double maxMeilleurCoup = 0;
+	
 		int res = 0;
 		Joueur adv = this.getAdversaire();
 		LinkedHashMap<CaseGrille, Joueur> mapPoids = new LinkedHashMap<>();	// |	Joueur	|	Poids d'une ligne
@@ -51,98 +51,62 @@ public class JoueurAuto extends Joueur{
 		// ////////// Pour les lignes et colones //////////
 		for (int jLigne = 0; jLigne < grilleDeJeu.getTaille(); jLigne++) {
 			
-			int nbPionsLigneSelf = 0;	 int nbPionsLigneAdv = 0;
-			int nbPionsColSelf = 0;		 int nbPionsColAdv = 0;
-			int poidsLigneSelf = 0;		 int poidsLigneAdv = 0;
-			int poidsColSelf = 0; 		 int poidsColAdv = 0;
+			// nbPion sur une ligne
+			int nbPionsLigneSelf = grilleDeJeu.getNbPionDansLigne(jLigne,this); // nbPions IA
+			int nbPionsLigneAdv = grilleDeJeu.getNbPionDansLigne(jLigne,adv); // nbPions ADVERSAIRE
+			int nbPionsLigne = nbPionsLigneSelf + nbPionsLigneAdv;
+			int scoreLigne = 0;
 			
-			// L -> pas une coordonnée mais une ligne
-//				CaseGrille cgLigne = new CaseGrille(new Coordonnee("L"+jNumLigne), false, 1);
-			// C -> pas une coordonnée mais une Colone
-//				CaseGrille cgCol = new CaseGrille(new Coordonnee("C"+jNumLigne), false, 1);
+			if (nbPionsLigne == 0) { scoreLigne = (nbPionsLigneSelf - nbPionsLigneAdv) * 10; }
+			if (nbPionsLigne == 1) { scoreLigne = (nbPionsLigneSelf - nbPionsLigneAdv) * 20; }
+			if (nbPionsLigne == 2) { scoreLigne = (nbPionsLigneSelf - nbPionsLigneAdv) * 30; }
+			if (nbPionsLigne == 3) { scoreLigne = (nbPionsLigneSelf - nbPionsLigneAdv) * 40; }
+			mapPoids.put(new CaseGrille("Score Ligne n°"+jLigne, scoreLigne), null);	// ajout dans le map
+		
+			// nbPion sur une colone
+			int nbPionsColSelf = grilleDeJeu.getNbPionDansColonne(jLigne,this);	
+			int nbPionsColAdv = grilleDeJeu.getNbPionDansColonne(jLigne,adv);	
+			int nbPionsColone = nbPionsColSelf + nbPionsColAdv;
+			int scoreColone = 0;
 			
-			// pour lui meme: nbPions LIGNES IA
-			nbPionsLigneSelf = grilleDeJeu.getNbPionDansLigne(jLigne,this);	
-//				System.out.println("nb Pions de joueur "+this.getNom()+" >>>" + nbPionsLigneSelf);
-			if (nbPionsLigneSelf == 0) { poidsLigneSelf = nbPionsLigneSelf * 10; }	
-			if (nbPionsLigneSelf == 1) { poidsLigneSelf = nbPionsLigneSelf * 10; }	// calcul poidsLigne, pour 1 pion 
-			if (nbPionsLigneSelf == 2) { poidsLigneSelf = nbPionsLigneSelf * 30; } 	// calcul poidsLigne, pour 2 pions
-			if (nbPionsLigneSelf == 3) { poidsLigneSelf = nbPionsLigneSelf * 40; }	// calcul poidsLigne, pour 3 pions
-			mapPoids.put(new CaseGrille("Ligne IA n°"+jLigne, poidsLigneSelf), this);	// ajout dans le map
-			
-			// pour adversaire: nbPions  LIGNE ADVERSAIRE
-			nbPionsLigneAdv = grilleDeJeu.getNbPionDansLigne(jLigne,adv);	
-			if (nbPionsLigneAdv == 0) { poidsLigneAdv = (nbPionsLigneAdv * -1); }	// calcul poidsLigne, pour 1 pion 
-			if (nbPionsLigneAdv == 1) { poidsLigneAdv = (nbPionsLigneAdv * 10 * -1); }	// calcul poidsLigne, pour 1 pion 
-			if (nbPionsLigneAdv == 2) { poidsLigneAdv = (nbPionsLigneAdv * 30 * -1); } 	// calcul poidsLigne, pour 2 pions
-			if (nbPionsLigneAdv == 3) { poidsLigneAdv = (nbPionsLigneAdv * 40 * -1); }	// calcul poidsLigne, pour 3 pions
-			mapPoids.put(new CaseGrille("Ligne IA n°"+jLigne, poidsLigneAdv), adv);	// ajout dans le map
+			if (nbPionsColone == 0) { scoreColone = (nbPionsColSelf - nbPionsColAdv) * 10; }
+			if (nbPionsColone == 1) { scoreColone = (nbPionsColSelf - nbPionsColAdv) * 20; }
+			if (nbPionsColone == 2) { scoreColone = (nbPionsColSelf - nbPionsColAdv) * 30; }
+			if (nbPionsColone == 3) { scoreColone = (nbPionsColSelf - nbPionsColAdv) * 40; }
+			mapPoids.put(new CaseGrille("Score Colonne n°"+jLigne, scoreColone), null);	// ajout dans le map
+		}
+		
+		// Diagonale A0
+		int scoreDiagA0 = 0;
+		int nbPionsDiagonaleSelfA0 = grilleDeJeu.getnbPionDansDiagonaleA0(this);	
+		int nbPionsDiagonaleAdvA0 = grilleDeJeu.getnbPionDansDiagonaleA0(adv);
+		int nbPionsDiagonaleA0 = nbPionsDiagonaleSelfA0 + nbPionsDiagonaleAdvA0;
 
-			
-			// pour IA: nbPions COLONES IA
-			nbPionsColSelf = grilleDeJeu.getNbPionDansColonne(jLigne,this);	
-			if (nbPionsColSelf == 0) { poidsColSelf = nbPionsColSelf * 10; }	
-			if (nbPionsColSelf == 1) { poidsColSelf = nbPionsColSelf * 10; }	// calcul poidsLigne, pour 1 pion 
-			if (nbPionsColSelf == 2) { poidsColSelf = nbPionsColSelf * 30; } 	// calcul poidsLigne, pour 2 pions
-			if (nbPionsColSelf == 3) { poidsColSelf = nbPionsColSelf * 40; }	// calcul poidsLigne, pour 3 pions
-			mapPoids.put(new CaseGrille("Colone IA n°"+jLigne, poidsColSelf), this);	// ajout dans le map
-			
-			nbPionsColAdv = grilleDeJeu.getNbPionDansColonne(jLigne,adv);	
-			if (nbPionsColAdv == 0) { poidsColAdv = nbPionsColAdv * 10 * -1; }	
-			if (nbPionsColAdv == 1) { poidsColAdv = nbPionsColAdv * 10 * -1; }	// calcul poidsLigne, pour 1 pion 
-			if (nbPionsColAdv == 2) { poidsColAdv = nbPionsColAdv * 30 * -1; } 	// calcul poidsLigne, pour 2 pions
-			if (nbPionsColAdv == 3) { poidsColAdv = nbPionsColAdv * 40 * -1; }	// calcul poidsLigne, pour 3 pions
-			mapPoids.put(new CaseGrille("Colone Adverse n°"+jLigne, poidsColAdv), adv);	// ajout dans le map	
-		}
+		if (nbPionsDiagonaleA0 == 0) { scoreDiagA0 = (nbPionsDiagonaleSelfA0 - nbPionsDiagonaleAdvA0) * 10; }
+		if (nbPionsDiagonaleA0 == 1) { scoreDiagA0 = (nbPionsDiagonaleSelfA0 - nbPionsDiagonaleAdvA0) * 20; }
+		if (nbPionsDiagonaleA0 == 2) { scoreDiagA0 = (nbPionsDiagonaleSelfA0 - nbPionsDiagonaleAdvA0) * 30; }
+		if (nbPionsDiagonaleA0 == 3) { scoreDiagA0 = (nbPionsDiagonaleSelfA0 - nbPionsDiagonaleAdvA0) * 40; }
+		mapPoids.put(new CaseGrille("Score Diagonale A0: ", scoreDiagA0), null);	// ajout dans le map
 		
-		// 
-		// ////////// Pour les diagonales //////////  
-		// POUR LA DIAGONALE AO
-		int nbPionsDiagonaleSelfA0 = 0;	 int nbPionsDiagonaleAdvA0 = 0;
-		int poidsDiagonaleSelfA0 = 0;	 int poidsDiagonaleAdvA0 = 0;
+		// Diagonale D0
+		int scoreDiagD0 = 0;
+		int nbPionsDiagonaleSelfD0 = grilleDeJeu.getnbPionDansDiagonaleD0(this);	
+		int nbPionsDiagonaleAdvD0 = grilleDeJeu.getnbPionDansDiagonaleD0(adv);
+		int nbPionsDiagonaleD0 = nbPionsDiagonaleSelfD0 + nbPionsDiagonaleAdvD0;
 		
-		// pour lui meme: nbPions DIAGONALE IA AO
-		nbPionsDiagonaleSelfA0 = grilleDeJeu.getnbPionDansDiagonaleA0(this);	
-		if (nbPionsDiagonaleSelfA0 == 0) { poidsDiagonaleSelfA0 = nbPionsDiagonaleSelfA0 * 10; }	
-		if (nbPionsDiagonaleSelfA0 == 1) { poidsDiagonaleSelfA0 = nbPionsDiagonaleSelfA0 * 10; }	// calcul poidsLigne, pour 1 pion 
-		if (nbPionsDiagonaleSelfA0 == 2) { poidsDiagonaleSelfA0 = nbPionsDiagonaleSelfA0 * 30; } 	// calcul poidsLigne, pour 2 pions
-		if (nbPionsDiagonaleSelfA0 == 3) { poidsDiagonaleSelfA0 = nbPionsDiagonaleSelfA0 * 40; }	// calcul poidsLigne, pour 3 pions
-		mapPoids.put(new CaseGrille("Diagonale IA n° A0", poidsDiagonaleSelfA0), this);				// ajout dans le map
+		if (nbPionsDiagonaleD0 == 0) { scoreDiagD0 = (nbPionsDiagonaleSelfD0 - nbPionsDiagonaleAdvD0) * 10; }
+		if (nbPionsDiagonaleD0 == 1) { scoreDiagD0 = (nbPionsDiagonaleSelfD0 - nbPionsDiagonaleAdvD0) * 20; }
+		if (nbPionsDiagonaleD0 == 2) { scoreDiagD0 = (nbPionsDiagonaleSelfD0 - nbPionsDiagonaleAdvD0) * 30; }
+		if (nbPionsDiagonaleD0 == 3) { scoreDiagD0 = (nbPionsDiagonaleSelfD0 - nbPionsDiagonaleAdvD0) * 40; }
+		mapPoids.put(new CaseGrille("Score Diagonale D0 ", scoreDiagD0), null);	// ajout dans le map
 		
-		// pour lui meme: nbPions DIAGONALE ADVERSAIRE A0
-		nbPionsDiagonaleAdvA0 = grilleDeJeu.getnbPionDansDiagonaleA0(adv);	
-		if (nbPionsDiagonaleAdvA0 == 0) { poidsDiagonaleAdvA0 = nbPionsDiagonaleAdvA0 * 10 * -1; }	
-		if (nbPionsDiagonaleAdvA0 == 1) { poidsDiagonaleAdvA0 = nbPionsDiagonaleAdvA0 * 10 * -1; }	// calcul poidsLigne, pour 1 pion 
-		if (nbPionsDiagonaleAdvA0 == 2) { poidsDiagonaleAdvA0 = nbPionsDiagonaleAdvA0 * 30 * -1; } 	// calcul poidsLigne, pour 2 pions
-		if (nbPionsDiagonaleAdvA0 == 3) { poidsDiagonaleAdvA0 = nbPionsDiagonaleAdvA0 * 40 * -1; }	// calcul poidsLigne, pour 3 pions
-		mapPoids.put(new CaseGrille("Diagonale adverse n° A0", poidsDiagonaleAdvA0), adv);		// ajout dans le map
-		
-		// POUR LA DIAGONALE DO
-		int nbPionsDiagonaleSelfD0 = 0;	 int nbPionsDiagonaleAdvD0 = 0;
-		int poidsDiagonaleSelfD0 = 0;	 int poidsDiagonaleAdvD0 = 0;
-		
-		// pour lui meme: nbPions DIAGONALE IA DO
-		nbPionsDiagonaleSelfD0 = grilleDeJeu.getnbPionDansDiagonaleD0(this);	
-		if (nbPionsDiagonaleSelfD0 == 0) { poidsDiagonaleSelfD0 = nbPionsDiagonaleSelfD0 * 10; }	
-		if (nbPionsDiagonaleSelfD0 == 1) { poidsDiagonaleSelfD0 = nbPionsDiagonaleSelfD0 * 10; }	// calcul poidsLigne, pour 1 pion 
-		if (nbPionsDiagonaleSelfD0 == 2) { poidsDiagonaleSelfD0 = nbPionsDiagonaleSelfD0 * 30; } 	// calcul poidsLigne, pour 2 pions
-		if (nbPionsDiagonaleSelfD0 == 3) { poidsDiagonaleSelfD0 = nbPionsDiagonaleSelfD0 * 40; }	// calcul poidsLigne, pour 3 pions
-		mapPoids.put(new CaseGrille("Diagonale IA n° D0", poidsDiagonaleSelfD0), this);				// ajout dans le map
-		
-		// pour lui meme: nbPions DIAGONALE ADVERSAIRE D0
-		nbPionsDiagonaleAdvD0 = grilleDeJeu.getnbPionDansDiagonaleD0(adv);	
-		if (nbPionsDiagonaleAdvD0 == 0) { poidsDiagonaleAdvD0 = nbPionsDiagonaleAdvD0 * 10 * -1; }	
-		if (nbPionsDiagonaleAdvD0 == 1) { poidsDiagonaleAdvD0 = nbPionsDiagonaleAdvD0 * 10 * -1; }	// calcul poidsLigne, pour 1 pion 
-		if (nbPionsDiagonaleAdvD0 == 2) { poidsDiagonaleAdvD0 = nbPionsDiagonaleAdvD0 * 30 * -1; } 	// calcul poidsLigne, pour 2 pions
-		if (nbPionsDiagonaleAdvD0 == 3) { poidsDiagonaleAdvD0 = nbPionsDiagonaleAdvD0 * 40 * -1; }	// calcul poidsLigne, pour 3 pions
-		mapPoids.put(new CaseGrille("Diagonale adverse n° D0", poidsDiagonaleAdvD0), adv);		// ajout dans le map
-	
-		System.out.println("pour test");
+		System.out.println(">> contenu du map");
 		for (Map.Entry<CaseGrille, Joueur> entry : mapPoids.entrySet()) {
-			System.out.println("> test mapPoids: "+entry.getKey().toString());			
+			System.out.println("> test mapPoids: "+entry.getKey().toString());	
+			res += entry.getKey().getPoidsLigne();
 		}
 		
-		
+		System.out.println("somme totale: "+ res);
 		// TODO faire la somme res entre les pions Joueur et les pions IA pour les lignes , les colones et les diagonales, 
 		
 		return res;
