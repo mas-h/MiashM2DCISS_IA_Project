@@ -243,4 +243,9 @@ public class GrilleHashmapMorpion {
 		System.out.println(testGrille.toString());
 	}
 
+
+	public LinkedHashMap<CaseGrille, Joueur> getGrille() {
+		return grille;
+	}
+
 }

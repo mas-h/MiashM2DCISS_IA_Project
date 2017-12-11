@@ -75,7 +75,8 @@ public abstract class Joueur {
 			
 				// calcul de la meilleure coordonnée à jouer
 //				System.out.println("typeof: "+ this.getClass());
-				evaluationGrille(grilleDeJeu);
+				//evaluationGrille(grilleDeJeu);
+				
 				inputCoordStr = "A1"; // TODO: resultat d'exemple à changer par le retour de la methode
 
 				inputCoord = new Coordonnee(inputCoordStr);
@@ -120,6 +121,10 @@ public abstract class Joueur {
 	protected abstract void retourDefense(Coordonnee c, int etat);	
 	
 	public abstract int evaluationGrille(GrilleHashmapMorpion grille);
+	
+	public abstract double Max(GrilleHashmapMorpion grille, int profondeur);
+	
+	public abstract double Min(GrilleHashmapMorpion grille, int profondeur);
 	
 //	public abstract void debutAttaque();
 
