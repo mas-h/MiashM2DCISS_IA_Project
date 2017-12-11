@@ -1,6 +1,7 @@
 package com.OHMCorporation.Morpion;
 
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 //import batailleNavale.Coordonnee;
 
@@ -77,7 +78,7 @@ public abstract class Joueur {
 //				System.out.println("typeof: "+ this.getClass());
 				//evaluationGrille(grilleDeJeu);
 				
-				inputCoordStr = "A1"; // TODO: resultat d'exemple à changer par le retour de la methode
+				inputCoordStr = returnBestCoord(grilleDeJeu, 1).toString(); // TODO: resultat d'exemple à changer par le retour de la methode
 
 				inputCoord = new Coordonnee(inputCoordStr);
 				this.attaque(inputCoord);
@@ -126,6 +127,7 @@ public abstract class Joueur {
 	
 	public abstract double Min(GrilleHashmapMorpion grille, int profondeur);
 	
+	public abstract Coordonnee returnBestCoord(GrilleHashmapMorpion grille, int profondeur);
 //	public abstract void debutAttaque();
 
 }

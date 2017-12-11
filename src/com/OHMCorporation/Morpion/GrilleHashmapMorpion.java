@@ -144,7 +144,7 @@ public class GrilleHashmapMorpion {
 		for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
 			if(j.equals(entry.getValue()) && entry.getKey().getCoordonnee().getLigne() == numLigne) {
 				nbPionDansLigne++;
-				System.out.println("joueur: "+ j.getNom() + " nbPionDansLigne "+ nbPionDansLigne);
+//				System.out.println("joueur: "+ j.getNom() + " nbPionDansLigne "+ nbPionDansLigne);
 			}		
 		}
 		return nbPionDansLigne;
