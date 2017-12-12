@@ -133,16 +133,16 @@ public class JoueurAuto extends Joueur{
 			
 			int valMax = Integer.MIN_VALUE;
 			int tmpMax;
-			
-			if (profondeur == 0 || grilleJeu.finDujeu(this)|| grilleJeu.finDujeu(this.getAdversaire())){ // si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
+			// si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner
+			if (profondeur == 0 || grilleJeu.finDujeu(this)|| grilleJeu.finDujeu(this.getAdversaire())){  
 				System.out.println(">>>Max est appelé !");
 				return evaluationGrille(grilleJeu);} // On retourne l'évaluation
 			
 			for (Map.Entry<CaseGrille, Joueur> entry : grilleJeu.getGrille().entrySet()) { // sinon on parcours le jeu et à chaque case vide on simule 
 	            if (entry.getKey().getIsOccupied()==false) {
-	            	grilleJeu.ajoutePionParJoueur(this, entry.getKey().getCoordonnee()); //jeu->joue(i,j);
-	            	
-	            	tmpMax = findMin(grilleJeu, profondeur-1); // on calcule la valeur min et on compare si c'est plus grand que la valeur max
+	            	grilleJeu.ajoutePionParJoueur(this, entry.getKey().getCoordonnee());
+	            	// on calcule la valeur min et on compare si c'est plus grand que la valeur max
+	            	tmpMax = findMin(grilleJeu, profondeur-1); 
 	            	if(tmpMax > valMax){
 	            		valMax = tmpMax;
 	            	}
