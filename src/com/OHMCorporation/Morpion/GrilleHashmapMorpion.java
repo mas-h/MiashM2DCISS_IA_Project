@@ -8,9 +8,6 @@ public class GrilleHashmapMorpion {
 	// ATTRIBUTS DE LA CLASSE
 	private int taille; // la taille de la grille
 
-	
-
-	private int nbToursJoues; // permettra de définir quand la partie est finie en cas d'égalité
 
 	// la grille est représentée dans un map. CaseGrille initialisé par une
 	// Coordonnée,null car auccun joueur n'a encore joué la case
@@ -196,9 +193,9 @@ public class GrilleHashmapMorpion {
 	// Fonctionne pour les cas d'égalités, les cas de victoire horizontaux et verticaux
 	public boolean finDujeu(Joueur j){ 
 		// cas d'égalité entre les joueurs
-		if(j.getNbJoue() >= maxCoupJoue) {
+		if(j.getNbJoue() >= maxCoupJoue && j.getAdversaire().getNbJoue() >= maxCoupJoue) {
 //		if (this.grille.si==(nb)caseOccupeesJ1.length && tourJoue()) { 
-			System.out.println("Partie terminée !");
+			System.out.println("Partie terminée ! Egalité");
 			return true;
 		} else {   // on fait les test pour toutes les lignes et les colonnes (4 itérations ici au plus, taille de la grille)
 			for (int i = 0; i<this.taille;i++) { 
@@ -220,13 +217,13 @@ public class GrilleHashmapMorpion {
 
 		// instanciation de joueurTexte de type abstrait Joueur
 		JoueurTexte joueur1 = new JoueurTexte(testGrille, "Joueur 1", "1");
-		JoueurTexte joueur2 = new JoueurTexte(testGrille, "Joueur 2", "2");
+	//	JoueurTexte joueur2 = new JoueurTexte(testGrille, "Joueur 2", "2");
 
 		Coordonnee test1 = new Coordonnee("A0");
 		Coordonnee test2 = new Coordonnee("A1");
 		Coordonnee test3 = new Coordonnee("A2");
 		Coordonnee test4 = new Coordonnee("A3");
-		Coordonnee testJ2 = new Coordonnee("B1");
+	//	Coordonnee testJ2 = new Coordonnee("B1");
 
 		testGrille.ajoutePionParJoueur(joueur1, test1);
 		testGrille.ajoutePionParJoueur(joueur1, test2);
