@@ -9,20 +9,26 @@ public abstract class Joueur {
 	
 	protected GrilleHashmapMorpion grilleDeJeu;
 	private String nomJoueur;
-	private String idJoueur;
+	private String typeDejoueur;
 	private Joueur adversaire;
-	
-	
-
 	private int nbJoue =0;
-
 	private Scanner scInput = new Scanner(System.in);
-
+	private int profondeur;
+	private int numeroDeJoueur; // numero de joueur 1 ou 2 
 	
-	public Joueur(GrilleHashmapMorpion grilleJeu, String nom, String id) {
+
+	public Joueur(GrilleHashmapMorpion grilleJeu, String nom, String type) {
 		this.grilleDeJeu = grilleJeu;
 		this.nomJoueur = nom;
-		this.idJoueur = id;
+		this.typeDejoueur = type;
+	}
+	
+	public int getProfondeur() {
+		return profondeur;
+	}
+
+	public void setProfondeur(int difficulteProfondeur) {
+		this.profondeur = difficulteProfondeur;
 	}
 	
 	public Joueur getAdversaire() {
@@ -38,9 +44,23 @@ public abstract class Joueur {
 		return this.nomJoueur;
 	}
 	
-	public String getID() {
-		return this.idJoueur;
+	public String getTypeDeJoueur() {
+		return this.typeDejoueur;
 	}
+	
+	public int getNbJoue() {
+		return nbJoue;
+	}
+	
+
+	public int getNumeroDeJoueur() {
+		return numeroDeJoueur;
+	}
+
+	public void setNumeroDeJoueur(int numeroDeJoueur) {
+		this.numeroDeJoueur = numeroDeJoueur;
+	}
+
 	
 	public void jouerAvec(Joueur j) {
 		 this.adversaire = j;
@@ -66,20 +86,14 @@ public abstract class Joueur {
 			Coordonnee inputCoord = new Coordonnee(0, 0);
 			
 			System.out.println("------------------------------------------");
-			System.out.println("C'est au tour de " + this.getNom() + " de jouer !");
+			System.out.println("C'est au tour du joueur " + this.getNom() + " de jouer !");
 
 			System.out.println("En quelle coordonnée allez-vous jouer ?: \n");
 			
 			// si on jour contre une IA
-			if (this.getNom().equals("Joueur IA")) {
-				System.out.println(">> appel de l'algo de l'ia");
-			
-				// calcul de la meilleure coordonnée à jouer
-//				System.out.println("typeof: "+ this.getClass());
-				//evaluationGrille(grilleDeJeu);
-				
-				inputCoordStr = returnBestCoord(grilleDeJeu, 1).toString(); // TODO: resultat d'exemple à changer par le retour de la methode
-
+			if (this.getTypeDeJoueur().equals("2")) {
+				System.out.println("Infos >> appel de l'algo de l'ia");
+				inputCoordStr = returnBestCoord(grilleDeJeu, profondeur).toString(); // TODO: resultat d'exemple à changer par le retour de la methode
 				inputCoord = new Coordonnee(inputCoordStr);
 				this.attaque(inputCoord);
 			// sinon c'est un joueur	
@@ -87,7 +101,7 @@ public abstract class Joueur {
 				inputCoordStr = this.scInput.nextLine();
 				inputCoord = new Coordonnee(inputCoordStr);
 				this.attaque(inputCoord);
-				}
+			}
 		}
 		
 	}
@@ -95,9 +109,7 @@ public abstract class Joueur {
 	
 	
 	
-	public int getNbJoue() {
-		return nbJoue;
-	}
+
 	
 	public abstract int evaluationGrille(GrilleHashmapMorpion grille);
 	

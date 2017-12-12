@@ -81,7 +81,7 @@ public class GrilleHashmapMorpion {
 				casesGrille = casesGrille + "\t-";
 				nbCol += 1;
 			} else {
-				if (entry.getValue().getID().equals("1")) {
+				if (entry.getValue().getNumeroDeJoueur() == 1) {
 					casesGrille = casesGrille + "\tX";
 					nbCol += 1;
 				} else {
@@ -202,7 +202,7 @@ public class GrilleHashmapMorpion {
 				// si 4 cases avec la même lignes ou 4 cases avec la même colonne alors c'est gagné
 				if (this.getNbPionDansColonne(i, j) == this.taille || this.getNbPionDansLigne(i, j) == this.taille 		
 						|| this.getnbPionDansDiagonaleA0(j) == this.taille || this.getnbPionDansDiagonaleD0(j) == this.taille) { 
-					System.out.println("Victoire du joueur "+j.getID());
+					System.out.println("Victoire de "+j.getNom());
 					System.out.println("Partie terminée !");
 					return true;
 				}
