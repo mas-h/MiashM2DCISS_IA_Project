@@ -1,7 +1,7 @@
 package com.OHMCorporation.Morpion;
 
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
+
 
 //import batailleNavale.Coordonnee;
 
@@ -87,45 +87,23 @@ public abstract class Joueur {
 				inputCoordStr = this.scInput.nextLine();
 				inputCoord = new Coordonnee(inputCoordStr);
 				this.attaque(inputCoord);
-			}
+				}
 		}
 		
 	}
 	
 	
-	public boolean defense(Coordonnee c) {
-		
-		int etat = 0;
-
-		retourDefense(c, etat);
-		adversaire.retourAttaque(c, etat);
-		return true;	
-	}
+	
 	
 	public int getNbJoue() {
 		return nbJoue;
 	}
 	
-	
-	
-	
-	// invoqué lorsque this a perdu la partie. Agit sur l'interface.
-	protected abstract void perdu();
-	
-	// invoqué lorsque this a gagné la partie. Agit sur l'interface.
-	protected abstract void gagne();	
-	
-	// donne le droit d'attaquer à l'autre.
-	protected abstract void retourAttaque(Coordonnee c, int etat);	
-	
-	// donne le droit de défendre à l'autre.
-	protected abstract void retourDefense(Coordonnee c, int etat);	
-	
 	public abstract int evaluationGrille(GrilleHashmapMorpion grille);
 	
-	public abstract double Max(GrilleHashmapMorpion grille, int profondeur);
+	public abstract int findMax(GrilleHashmapMorpion grille, int profondeur);
 	
-	public abstract double Min(GrilleHashmapMorpion grille, int profondeur);
+	public abstract int findMin(GrilleHashmapMorpion grille, int profondeur);
 	
 	public abstract Coordonnee returnBestCoord(GrilleHashmapMorpion grille, int profondeur);
 //	public abstract void debutAttaque();
