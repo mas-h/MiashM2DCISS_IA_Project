@@ -14,10 +14,6 @@ public class GrilleHashmapMorpion {
 	// on pourra mettre différents types de joueurs, JoueurTexte, JoueurIA, etc ..
 	// private HashMap <CaseGrille, Joueur> grille = new HashMap<>();
 	private LinkedHashMap<CaseGrille, Joueur> grille = new LinkedHashMap<>();
-
-//	private int nbCoupsJ1 = 0;
-//	private int nbCoupsJ2 = 0;
-	
 	private int maxCoupJoue = 0;
 
 
@@ -70,14 +66,15 @@ public class GrilleHashmapMorpion {
 				casesGrille = casesGrille + "\n" + nbLigne;
 				nbLigne += 1;
 			}
-
-			if (nbCol == 4) {	// on regarde si on est à la colone 4
+			// on regarde si on est à la colone taille
+			if (nbCol == this.taille) {	
 				casesGrille = casesGrille + "\n" + nbLigne;
 				nbCol = 0; // on remet à 0 nbCol à la fin de la ligne
 				nbLigne += 1; // on incrémente nbLigne à la fin d'une colone
 			}
 			// sinon on rempli la chaine en fonction des verifications
-			if (entry.getValue() == null) {	// Si la valeur associée à la clée vaut nulle
+			// Si la valeur associée à la clée vaut nulle
+			if (entry.getValue() == null) {	
 				casesGrille = casesGrille + "\t-";
 				nbCol += 1;
 			} else {
@@ -90,7 +87,6 @@ public class GrilleHashmapMorpion {
 				}
 			}
 		}
-		// On revoie le tout ! MAIS TANT MIEUX ! MAIS TANT MIEUX !
 		return (casesGrille);
 	}
 
@@ -98,9 +94,7 @@ public class GrilleHashmapMorpion {
 	private boolean estDansGrille(Coordonnee c) {
 		return ((c.getLigne() < taille && c.getColonne() < taille && c.getLigne() >= 0 && c.getColonne() >= 0));
 	}
-
 	// On est certain que la coordonnée (la clé) existe, on vérifie donc juste si la
-	// valeur est != de null
 	private boolean estDejaOcp(Coordonnee c) {
 		for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
 			if (entry.getKey().getCoordonnee().equals(c) && entry.getValue() != null) {
@@ -159,57 +153,73 @@ public class GrilleHashmapMorpion {
 	
 	public int getnbPionDansDiagonaleA0(Joueur j){ // méthode pour les verif de pion dans la diagonale qui débute en A0 et finie en D4
 		int nbPionDansDiagonale = 0;
-		Coordonnee A0 = new Coordonnee("A0");
-		Coordonnee B1 = new Coordonnee("B1");
-		Coordonnee C2 = new Coordonnee("C2");
-		Coordonnee D3 = new Coordonnee("D3");
-		
-		for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
-			if(j.equals(entry.getValue()) && ( entry.getKey().getCoordonnee().equals(A0) || entry.getKey().getCoordonnee().equals(B1) 
-					|| entry.getKey().getCoordonnee().equals(C2) || entry.getKey().getCoordonnee().equals(D3)) ) {
-				nbPionDansDiagonale++;
-			}		
-		}
-		return nbPionDansDiagonale;
-	}
-	
-	public int getnbPionDansDiagonaleD0(Joueur j){ // même chose pour la dagionale qui débute en D0 et finie en A3
-		int nbPionDansDiagonale = 0;
-		Coordonnee D0 = new Coordonnee("D0");
-		Coordonnee C1 = new Coordonnee("C1");
-		Coordonnee B2 = new Coordonnee("B2");
-		Coordonnee A3 = new Coordonnee("A3");
-		
-		for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
-			if(j.equals(entry.getValue()) && ( entry.getKey().getCoordonnee().equals(D0) || entry.getKey().getCoordonnee().equals(C1) 
-					|| entry.getKey().getCoordonnee().equals(B2) || entry.getKey().getCoordonnee().equals(A3)) ) {
-				nbPionDansDiagonale++;
-			}		
-		}
-		return nbPionDansDiagonale;
-	}
-	
+		for (int i = 0; i < this.taille; i++) {
+			Coordonnee C = new Coordonnee(i,i);
+			for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
 
-	// Fonctionne pour les cas d'égalités, les cas de victoire horizontaux et verticaux
-	public boolean finDujeu(Joueur j){ 
-		// cas d'égalité entre les joueurs
-		if(j.getNbJoue() >= maxCoupJoue && j.getAdversaire().getNbJoue() >= maxCoupJoue) {
-//		if (this.grille.si==(nb)caseOccupeesJ1.length && tourJoue()) { 
-			System.out.println("Partie terminée ! Egalité");
-			return true;
-		} else {   // on fait les test pour toutes les lignes et les colonnes (4 itérations ici au plus, taille de la grille)
-			for (int i = 0; i<this.taille;i++) { 
-				// si 4 cases avec la même lignes ou 4 cases avec la même colonne alors c'est gagné
-				if (this.getNbPionDansColonne(i, j) == this.taille || this.getNbPionDansLigne(i, j) == this.taille 		
-						|| this.getnbPionDansDiagonaleA0(j) == this.taille || this.getnbPionDansDiagonaleD0(j) == this.taille) { 
-					System.out.println("Victoire de "+j.getNom());
-					System.out.println("Partie terminée !");
-					return true;
+				if(j.equals(entry.getValue()) && ( entry.getKey().getCoordonnee().equals(C))){
+					nbPionDansDiagonale++;
 				}
 			}
-		} 
-		return false;
+		}
+		return nbPionDansDiagonale;
 	}
+	
+	public int getnbPionDansDiagonaleD0(Joueur joueur){ // même chose pour la dagionale qui débute en D0 et finie en A3
+		int nbPionDansDiagonale = 0;
+		int jLigne = 0;
+		for (int iCol = this.taille; iCol < this.taille; iCol--) {
+			Coordonnee C = new Coordonnee(this.taille,jLigne);
+			for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
+
+				if(joueur.equals(entry.getValue()) && ( entry.getKey().getCoordonnee().equals(C))){
+					nbPionDansDiagonale++;
+				}
+			}
+			jLigne++;
+		}
+		return nbPionDansDiagonale;
+	}
+	
+	/**
+	 * Retourne le nombre de pions de la grille de jeu, d'un joueur J 
+	 * @param j: Joueur
+	 * @return: entier: nb de pions
+	 */
+	public int getnbPionsDansGrille(Joueur j){
+		int nbPionsDansGrille = 0;		
+		for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
+			if(j.equals(entry.getValue())){
+				nbPionsDansGrille++;
+			}
+		}
+		return nbPionsDansGrille;
+	}
+	
+	
+	// Fonctionne pour les cas d'égalités, les cas de victoire horizontaux et verticaux
+		public boolean finDujeu(Joueur j){ 
+			   // on fait les test pour toutes les lignes et les colonnes (4 itérations ici au plus, taille de la grille)
+				for (int i = 0; i<this.taille;i++) { 
+					// si 4 cases avec la même lignes ou 4 cases avec la même colonne alors c'est gagné
+					if (this.getNbPionDansColonne(i, j) == this.taille || this.getNbPionDansLigne(i, j) == this.taille 		
+							|| this.getnbPionDansDiagonaleA0(j) == this.taille || this.getnbPionDansDiagonaleD0(j) == this.taille) { 
+						System.out.println("Victoire de "+j.getNom());
+						System.out.println("Partie terminée !");
+						return true;
+					}
+				}
+				// cas d'égalité entre les joueurs
+				if((j.getNbJoue() >= maxCoupJoue) && (j.getAdversaire().getNbJoue() >= maxCoupJoue)) {
+//				if (this.grille.si==(nb)caseOccupeesJ1.length && tourJoue()) { 
+					System.out.println("Partie terminée ! Egalité");
+					return true;
+				} 	
+			 
+			return false;
+		}
+	
+
 	
 	public static void main(String[] args) { // test
 

@@ -22,14 +22,8 @@ public class JoueurAuto extends Joueur{
 	public int evaluationGrille(GrilleHashmapMorpion grille) {
 		
 		// si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
-		
-		if (grille.finDujeu(this)){ 
-			return 1000;
-		}
-		
-		if (grille.finDujeu(this.getAdversaire())) {
-			return -1000;
-		}
+		if (grille.finDujeu(this)){ return (1000 - this.grilleDeJeu.getnbPionsDansGrille(this));}
+		if (grille.finDujeu(this.getAdversaire())) { return (-1000 + this.grilleDeJeu.getnbPionsDansGrille(this));}
 		// égalité
 //		if (grille.get) {
 //			
@@ -93,13 +87,10 @@ public class JoueurAuto extends Joueur{
 		
 		System.out.println(">> évalué ..\n");
 		for (Map.Entry<CaseGrille, Joueur> entry : mapPoids.entrySet()) {
-//			System.out.println("> test mapPoids: "+entry.getKey().toString());	
 			res += entry.getKey().getPoidsLigne();
 		}
 		
-		System.out.println("somme totale: "+ res);
-		// TODO faire la somme res entre les pions Joueur et les pions IA pour les lignes , les colones et les diagonales, 
-		
+		System.out.println("somme totale: "+ res);	
 		return res;
 	}
 	
@@ -109,7 +100,7 @@ public class JoueurAuto extends Joueur{
 			int tmpMin;
 			
 			if (profondeur == 0 || grilleJeu.finDujeu(this)|| grilleJeu.finDujeu(this.getAdversaire())){ // si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
-				System.out.println(">>> retour eval .. ");
+//				System.out.println(">>> retour eval .. ");
 				return evaluationGrille(grilleJeu);
 			} // On retourne l'évaluation
 			// get grille pas net
@@ -160,18 +151,20 @@ public class JoueurAuto extends Joueur{
 		Coordonnee bestChoice= new Coordonnee("E6");
 		
 		if (profondeur != 0 || !(grilleJeu.finDujeu(this))|| !(grilleJeu.finDujeu(this.getAdversaire() ) )){ // si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
-			System.out.println("on passe bien dans le if de bestcoord()");
-		
-			for (Map.Entry<CaseGrille, Joueur> entry : grilleJeu.getGrille().entrySet()) { // sinon on parcours le jeu et à chaque case vide on simule 
+//			System.out.println("on passe bien dans le if de bestcoord()");
+			// sinon on parcours le jeu et à chaque case vide on simule
+			for (Map.Entry<CaseGrille, Joueur> entry : grilleJeu.getGrille().entrySet()) {  
 	            if (entry.getKey().getIsOccupied()==false) {
-	            	System.out.println("on verifie une case libre");
-	            	grilleJeu.ajoutePionParJoueur(this, entry.getKey().getCoordonnee()); //On simule le fait d'avoir jouer ce pion;
-	            	
-	            	tmpMax = findMin(grilleJeu, profondeur-1); // on calcule la valeur min et on compare si c'est plus grand que la valeur max
+//	            	System.out.println("on verifie une case libre");
+	            	//On simule le fait d'avoir jouer ce pion;
+	            	grilleJeu.ajoutePionParJoueur(this, entry.getKey().getCoordonnee()); 
+	            	// on calcule la valeur min et on compare si c'est plus grand que la valeur max
+	            	tmpMax = findMin(grilleJeu, profondeur-1); 
 	            	System.out.println("tmp: " +tmpMax);
 	            	if (tmpMax==valMax){
 	            		System.out.println(">> dans tmp==max");
-	            		boolean random = Math.random() < 0.5; // si on obtient la même valeur que max, on choisi aléatoirement entre max et tmp
+	            		// si on obtient la même valeur que max, on choisi aléatoirement entre max et tmp
+	            		boolean random = Math.random() < 0.5; 
 	            		if (random){
 	            			valMax = tmpMax;
 	            			bestChoice = entry.getKey().getCoordonnee(); 
