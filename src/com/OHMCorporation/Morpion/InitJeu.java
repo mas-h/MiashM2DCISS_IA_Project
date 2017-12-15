@@ -14,7 +14,7 @@ public class InitJeu {
 		int profondeur = 1;
 		
 		System.out.println("------------------------------------------");
-		System.out.println("|  Bienvenue sur le jeu du morpion 4x4   |");
+		System.out.println("|  Bienvenue sur le jeu du morpion "+grille+" x "+grille+" |");
 		System.out.println("------------------------------------------\n");
 
 		for (int i = 1; i <= 2; i++) {
@@ -74,8 +74,9 @@ public class InitJeu {
 	}
 	
 	public static void main(String[] args) {
-		GrilleHashmapMorpion grille = new GrilleHashmapMorpion(4);
-				
+		
+		System.out.println("Choisissez la taille de la grille:");
+		GrilleHashmapMorpion grille = new GrilleHashmapMorpion(3);
 		initJoueurs(grille);
 		
 		System.out.println("Le match va commencer entre les 2 joueurs, c'est parti !\n");	 

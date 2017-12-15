@@ -109,7 +109,7 @@ public class JoueurAuto extends Joueur{
 			int tmpMin;
 			
 			if (profondeur == 0 || grilleJeu.finDujeu(this)|| grilleJeu.finDujeu(this.getAdversaire())){ // si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
-				System.out.println(">>> retour eval .. ");
+//				System.out.println(">>> retour eval .. ");
 				return evaluationGrille(grilleJeu);
 			} // On retourne l'évaluation
 			// get grille pas net
@@ -160,18 +160,20 @@ public class JoueurAuto extends Joueur{
 		Coordonnee bestChoice= new Coordonnee("E6");
 		
 		if (profondeur != 0 || !(grilleJeu.finDujeu(this))|| !(grilleJeu.finDujeu(this.getAdversaire() ) )){ // si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
-			System.out.println("on passe bien dans le if de bestcoord()");
-		
-			for (Map.Entry<CaseGrille, Joueur> entry : grilleJeu.getGrille().entrySet()) { // sinon on parcours le jeu et à chaque case vide on simule 
+//			System.out.println("on passe bien dans le if de bestcoord()");
+			// sinon on parcours le jeu et à chaque case vide on simule
+			for (Map.Entry<CaseGrille, Joueur> entry : grilleJeu.getGrille().entrySet()) {  
 	            if (entry.getKey().getIsOccupied()==false) {
-	            	System.out.println("on verifie une case libre");
-	            	grilleJeu.ajoutePionParJoueur(this, entry.getKey().getCoordonnee()); //On simule le fait d'avoir jouer ce pion;
-	            	
-	            	tmpMax = findMin(grilleJeu, profondeur-1); // on calcule la valeur min et on compare si c'est plus grand que la valeur max
+//	            	System.out.println("on verifie une case libre");
+	            	//On simule le fait d'avoir jouer ce pion;
+	            	grilleJeu.ajoutePionParJoueur(this, entry.getKey().getCoordonnee()); 
+	            	// on calcule la valeur min et on compare si c'est plus grand que la valeur max
+	            	tmpMax = findMin(grilleJeu, profondeur-1); 
 	            	System.out.println("tmp: " +tmpMax);
 	            	if (tmpMax==valMax){
 	            		System.out.println(">> dans tmp==max");
-	            		boolean random = Math.random() < 0.5; // si on obtient la même valeur que max, on choisi aléatoirement entre max et tmp
+	            		// si on obtient la même valeur que max, on choisi aléatoirement entre max et tmp
+	            		boolean random = Math.random() < 0.5; 
 	            		if (random){
 	            			valMax = tmpMax;
 	            			bestChoice = entry.getKey().getCoordonnee(); 
