@@ -181,6 +181,21 @@ public class GrilleHashmapMorpion {
 		return nbPionDansDiagonale;
 	}
 	
+	/**
+	 * Retourne le nombre de pions de la grille de jeu, d'un joueur J 
+	 * @param j: Joueur
+	 * @return: entier: nb de pions
+	 */
+	public int getnbPionsDansGrille(Joueur j){
+		int nbPionsDansGrille = 0;		
+		for (Map.Entry<CaseGrille, Joueur> entry : this.grille.entrySet()) {
+			if(j.equals(entry.getValue())){
+				nbPionsDansGrille++;
+			}
+		}
+		return nbPionsDansGrille;
+	}
+	
 	
 	// Fonctionne pour les cas d'égalités, les cas de victoire horizontaux et verticaux
 		public boolean finDujeu(Joueur j){ 

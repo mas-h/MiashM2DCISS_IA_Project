@@ -22,14 +22,8 @@ public class JoueurAuto extends Joueur{
 	public int evaluationGrille(GrilleHashmapMorpion grille) {
 		
 		// si la profondeur voulue a été atteinte ou si l'un des joueurs peut gagner 
-		
-		if (grille.finDujeu(this)){ 
-			return 1000;
-		}
-		
-		if (grille.finDujeu(this.getAdversaire())) {
-			return -1000;
-		}
+		if (grille.finDujeu(this)){ return (1000 - this.grilleDeJeu.getnbPionsDansGrille(this));}
+		if (grille.finDujeu(this.getAdversaire())) { return (-1000 + this.grilleDeJeu.getnbPionsDansGrille(this));}
 		// égalité
 //		if (grille.get) {
 //			
@@ -93,13 +87,10 @@ public class JoueurAuto extends Joueur{
 		
 		System.out.println(">> évalué ..\n");
 		for (Map.Entry<CaseGrille, Joueur> entry : mapPoids.entrySet()) {
-//			System.out.println("> test mapPoids: "+entry.getKey().toString());	
 			res += entry.getKey().getPoidsLigne();
 		}
 		
-		System.out.println("somme totale: "+ res);
-		// TODO faire la somme res entre les pions Joueur et les pions IA pour les lignes , les colones et les diagonales, 
-		
+		System.out.println("somme totale: "+ res);	
 		return res;
 	}
 	
